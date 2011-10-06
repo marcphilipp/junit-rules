@@ -1,6 +1,6 @@
 # JUnit Rules!
 
-von Marc Philipp
+Marc Philipp, andrena objects ag
 
 ## Über JUnit
 
@@ -68,6 +68,4 @@ TODO
 
 ---------------------------------------
 
-### Bio
-
-*Marc Philipp* (andrena objects ag) beschäftigt sich neben seiner Tätigkeit als Softwareentwickler mit der Arbeit an Entwicklungs- werkzeugen, insbesondere JUnit und Usus.
+*Marc Philipp* (andrena objects ag) beschäftigt sich neben seiner Tätigkeit als Softwareentwickler mit der Arbeit an Entwicklungswerkzeugen, insbesondere JUnit und Usus.
