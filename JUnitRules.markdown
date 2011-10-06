@@ -5,9 +5,11 @@ von Marc Philipp
 ## Über JUnit
 
 Kent Beck:
+
 > A programmer-oriented testing framework for Java.
 
 David Saff:
+
 > JUnit is the intersection of all possible useful Java test frameworks, not their union.
 
 Nicht nur für Unit Tests!
