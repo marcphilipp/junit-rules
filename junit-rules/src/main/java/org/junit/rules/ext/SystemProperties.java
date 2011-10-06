@@ -15,7 +15,7 @@ public class SystemProperties extends ExternalResource {
 		return this;
 	}
 
-	public SystemProperties unset(String key) {
+	public SystemProperties clear(String key) {
 		set(key, null);
 		return this;
 	}
@@ -44,7 +44,7 @@ public class SystemProperties extends ExternalResource {
 
 	private void put(String key, String value) {
 		if (value == null) {
-			System.getProperties().remove(key);
+			System.clearProperty(key);
 		} else {
 			System.setProperty(key, value);
 		}
