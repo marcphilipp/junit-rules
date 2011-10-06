@@ -1,12 +1,24 @@
-# JUnit Rules
+# JUnit Rules!
 
 von Marc Philipp
 
-## Definitionen
+## Über JUnit
+
+Kent Beck:
+> A programmer-oriented testing framework for Java.
+
+David Saff:
+> JUnit is the intersection of all possible useful Java test frameworks, not their union.
+
+Nicht nur für Unit Tests!
+
+
+## Definition von Rules
 
 ### [Jens Schauder](http://blog.schauderhaft.de/2009/10/04/junit-rules/)
 
 The purpose of the @Rule annotation is to mark public fields of a test class. These fields must be of type `TestRule`, or an implementing class. Such MethodRules behave similar to a AOP aspects, of course without use of any AOP library and specialized for Tests. They can execute code before, after or instead of a test method. 
+
 
 ## Einsatzbeispiele
 
