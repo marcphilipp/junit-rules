@@ -37,7 +37,7 @@ Kent Beck ([Interceptors in JUnit](http://www.threeriversinstitute.org/blog/?p=1
 
 > Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.
 
-Rules wurden in JUnit 4.9 nochmals erweitert und lassen sich nun auch auf Klassenebene (ähnlich wie `@BeforeClass`/`@AfterClass`) und in Testsuiten (mit dem `Suite` Runner`) verwenden.
+Rules wurden in JUnit 4.9 nochmals erweitert und lassen sich nun auch auf Klassenebene (ähnlich wie `@BeforeClass`/`@AfterClass`) und in Testsuiten (mit dem `Suite` Runner) verwenden.
 
 In Version 4.10 wurde eine weitere Rule eingeführt, die es ermöglicht die Reihenfolge in der Rules ausgeführt werden, zu kontrollieren (`RuleChain`).
 
