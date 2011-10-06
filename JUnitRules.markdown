@@ -28,6 +28,12 @@ Seitdem hat sich allerdings einiges getan:
 
 Aber: Rules sind am wichtigsten, weil ...
 
+- Machen eigene Custom Test Runner (High Lander Prinzip, nicht kombinierbar) überflüssig.
+
+Kent Beck ([Interceptors in JUnit](http://www.threeriversinstitute.org/blog/?p=155)):
+
+> Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.
+
 
 ## Definition von Rules
 
