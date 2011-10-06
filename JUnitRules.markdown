@@ -14,6 +14,18 @@ David Saff:
 
 Nicht nur für Unit Tests!
 
+## Motivation
+
+Jeder meint, JUnit zu kennen: JUnit ist einfach. Neue Features? Gibt's nicht. Oder?
+
+Seit der Umstellung von Vererbung auf Annotation-basierte Testschreibweise in Version 4.0 hat sich einiges getan:
+
+- Matchers: Flexiblere, lesbarere Assertions mit `assertThat` und [Hamcrest](http://code.google.com/p/hamcrest/) Matchers.
+- Theories: Formulierung von Tests als Eigenschaften mit Vor- und Nachbedingungen (Assumptions).
+- Categories: Tests in Kategorien einteilen und in separaten in Testsuiten ausführen.
+
+Aber: Rules sind am wichtigsten, weil ...
+
 
 ## Definition von Rules
 
