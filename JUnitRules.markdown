@@ -65,3 +65,8 @@ TODO:
 ## Schreib deine eigenen Regeln!
 
 TODO
+
+
+#### Bio
+
+*Marc Philipp* (andrena objects ag) beschäftigt sich neben seiner Tätigkeit als Softwareentwickler mit der Arbeit an Entwicklungs- werkzeugen, insbesondere JUnit und Usus.
