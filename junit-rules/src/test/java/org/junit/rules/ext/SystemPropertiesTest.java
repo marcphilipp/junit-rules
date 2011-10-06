@@ -24,7 +24,7 @@ public class SystemPropertiesTest {
 
 	@After
 	public void removeKnownKey() {
-		System.getProperties().remove(KNOWN_KEY);
+		System.clearProperty(KNOWN_KEY);
 	}
 
 	@Test
