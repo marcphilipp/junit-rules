@@ -28,11 +28,18 @@ Seitdem hat sich allerdings einiges getan:
 
 Aber: Rules sind am wichtigsten, weil ...
 
-- Machen eigene Custom Test Runner (High Lander Prinzip, nicht kombinierbar) überflüssig.
+- Wiederverwendbarkeit: Ermöglichen häufig benötigten SetUp/TearDown-Code in Klassen auszulagern, die sich auf einen Aspekt konzentrieren. 
+- Kombinierbarkeit: Beliebig viele Regeln in einem Test verwendbar. Machen eigene Custom Test Runner (High Lander Prinzip) überflüssig.
+- Delegation statt Vererbung: Helfen Testklassenhierarchien zu vermeiden! Keine Utility-Methoden mehr in Testoberklassen.
+- Erweiterbarkeit: Eigene Regeln schreiben ist einfach!
 
 Kent Beck ([Interceptors in JUnit](http://www.threeriversinstitute.org/blog/?p=155)):
 
 > Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.
+
+Rules wurden in JUnit 4.9 nochmals erweitert und lassen sich nun auch auf Klassenebene (ähnlich wie `@BeforeClass`/`@AfterClass`) und in Testsuiten (mit dem `Suite` Runner`) verwenden.
+
+In Version 4.10 wurde eine weitere Rule eingeführt, die es ermöglicht die Reihenfolge in der Rules ausgeführt werden, zu kontrollieren (`RuleChain`).
 
 
 ## Definition von Rules
@@ -48,3 +55,13 @@ The purpose of the `@Rule` annotation is to mark public fields of a test class. 
 - Vorbereitung vom Test verwendeter Ressourcen (z.B. Dateien, Server, Verbindungen) und sauberes Aufräumen nach Ausführung des Tests. Besonders wichtig, wenn die Ressourcen von mehreren Tests verwendet werden (z.B. `TemporaryFolder`).
 - Spezielle Überprüfungen nach oder vor jedem Test, die den Tests beispielsweise fehlschlagen lassen können. Beispiel `ErrorCollector`: Sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus.
 - Informationen über den Test innerhalb des Tests verfügbar machen (z.B. den Namen des Tests: `TestName`).
+
+## Beispiele
+
+TODO:
+
+- Double-Check: Rules werden vor `@Before`- und nach `@After`-Methoden ausgeführt.
+
+## Schreib deine eigenen Regeln!
+
+TODO
