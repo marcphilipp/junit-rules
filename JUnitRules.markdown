@@ -6,7 +6,7 @@ Marc Philipp, andrena objects ag
 
 Der Legende nach haben Kent Beck und Erich Gamma den Kern von JUnit auf dem Weg zu einer Konferenz im Flugzeug zwischen Zürich und Atlanta im Jahr 1997 geschrieben. Ihre Idee war ein Testing Framework zu schreiben, dessen Zielgruppe explizit Programmierer sind, also dieselben Leute, die auch den Code schreiben, den es zu testen gilt.
 
-JUnit ist inzwischen weit verbreitet und wird nicht nur zum Schreiben von Unit Tests verwendet, sondern auch zur Automatisierung von Integrations- und Akzeptanztests eingesetzt. Viele erfolgreiche Open Source Projekte zeichnen sich dadurch aus, dass mit der Zeit immer neue Features eingebaut werden. Das Ergebnis ist häufig, dass die einst simple Bibliothek unübersichtlich und schwer wartbar geworden ist.
+JUnit ist inzwischen weit verbreitet. Es wird nicht nur zum Schreiben von Unit Tests verwendet, sondern auch zur Automatisierung von Integrations- und Akzeptanztests eingesetzt. Viele erfolgreiche Open Source Projekte zeichnen sich dadurch aus, dass mit der Zeit immer neue Features eingebaut werden. Dies führt jedoch häufig dazu, dass die einst simple Bibliothek unübersichtlich und schwer wartbar wird.
 
 JUnit geht hier gezielt einen anderen Weg. David Saff, neben Kent Beck der zweite Maintainer von JUnit, sieht das so: „JUnit is the intersection of all possible useful Java test frameworks, not their union”. Die Wahrnehmung in der Java-Entwicklergemeinde ist dementsprechend: Da JUnit so einfach ist, meint jeder, der es schon einmal benutzt hat, es gut zu kennen. Das ist einerseits gut, denn die Hürde Unit Tests zu schreiben ist so sehr gering. Andererseits führt es dazu, dass Neuerungen von vielen Entwicklern entweder gar nicht oder erst verzögert wahrgenommen werden. 
 
@@ -66,10 +66,7 @@ public class TemporaryFolderWithoutRule {
 }
 ```
 
-
-
-
-## Wie helfen Rules, JUnit Tests einfacher zu formulieren?
+## Wie helfen Rules, Tests einfacher zu formulieren?
 
 ### Einsatzmöglichkeiten
 
@@ -102,6 +99,6 @@ Kent Beck ([Interceptors in JUnit](http://www.threeriversinstitute.org/blog/?p=1
 - Erweiterbarkeit: Eigene Regeln schreiben ist einfach!
 
 
----------------------------------------
+----------------------------------------------------------
 
 *Marc Philipp* (andrena objects ag) beschäftigt sich neben seiner Tätigkeit als Softwareentwickler mit der Arbeit an Entwicklungswerkzeugen.
