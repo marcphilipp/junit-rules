@@ -36,7 +36,7 @@ Würde man obigen Test auf herkömmliche Art und Weise schreiben, ohne die `Temp
 
 ```java
 public class TemporaryFolderWithoutRule {
-		private File folder;
+	private File folder;
 
 	@Before public void createTemporaryFolder() throws Exception {
 		folder = File.createTempFile("myFolder", "");
