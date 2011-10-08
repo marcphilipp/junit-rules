@@ -14,11 +14,59 @@ Wenn man nach Entwicklerkollegen nach Neuerungen in JUnit frägt, wird häufig d
 
 ## Was sind Rules?
 
-Was Rules sind, erklärt man am desten anhand ihrer Verwendung. Mithilfe der `@Rule` Annotation markiert man Instanzvariablen einer Testklasse. Diese Felder müssen `public` und vom Typ `TestRule` oder einer Implementierung dieses Interface sein. Eine so definierte Regel wirkt sich nun auf die Ausführung jeder Testmethode in der Testklasse aus. Ähnlich einem Aspekt in der aspektorientierten Programmierung (AOP) kann die Rule Code vor, nach oder anstelle der Testmethode ausführen [[1]](http://blog.schauderhaft.de/2009/10/04/junit-rules/).
+Was Rules sind, erklärt man am desten anhand ihrer Verwendung. Mithilfe der `@Rule`-Annotation markiert man Instanzvariablen einer Testklasse. Diese Felder müssen `public` und vom Typ `TestRule` oder einer Implementierung dieses Interface sein. Eine so definierte Regel wirkt sich nun auf die Ausführung jeder Testmethode in der Testklasse aus. Ähnlich einem Aspekt in der aspektorientierten Programmierung (AOP) kann die Rule Code vor, nach oder anstelle der Testmethode ausführen [[1]](http://blog.schauderhaft.de/2009/10/04/junit-rules/).
 
-Das klingt zunächst ziemlich abstrakt. Um das ganze ein bisschen konkreter zu machen, schauen wir uns am besten ein Beispiel an.
+Das klingt zunächst ziemlich abstrakt. Um das ganze ein bisschen konkreter zu machen, schauen wir die Verwendung einer Rule anhand des folgenden (bedingt sinnvollen) Beispiels an:
 
-TODO Beispiel
+```java
+public class TemporaryFolderWithRule {
+
+	@Rule public TemporaryFolder folder = new TemporaryFolder();
+
+	@Test public void test() throws Exception {
+		File file = folder.newFile("test.txt");
+		assertTrue(file.exists());
+	}
+}
+```
+
+Hier ist die Instanzvariable `folder` mit der `@Rule`-Annotation versehen. Der Typ von `folder` ist `org.junit.rules.TemporaryFolder`, eine Standard-Rule, die in JUnit enthalten ist. Weiter gibt es eine Testmethode `test()`, die unsere Rule verwendet, um die Datei `test.txt` anzulegen und danach abprüft, dass die Datei erzeugt wurde. Doch wo wurde die Datei erzeugt? Der Name `TemporaryFolder` suggeriert es bereits: in einem temporären Ordner. Doch wer kümmert sich darum, dass die neue Datei und der temporäre Ordner nach dem Ende des Tests wieder gelöscht wird? Da die Rule sowohl Datei als auch Ordner angelegt hat, ist sie dafür verantwortlich diese auch wieder zu entfernen.
+
+Würde man obigen Test auf herkömmliche Art und Weise schreiben, ohne die `TemporaryFolder`-Rule zu verwenden, sähe das in etwa so aus:
+
+```java
+public class TemporaryFolderWithoutRule {
+		private File folder;
+
+	@Before public void createTemporaryFolder() throws Exception {
+		folder = File.createTempFile("myFolder", "");
+		folder.delete();
+		folder.mkdir();
+	}
+
+	@Test public void test() throws Exception {
+		File file = new File(folder, "test.txt");
+		file.createNewFile();
+		assertTrue(file.exists());
+	}
+
+	@After public void deleteTemporaryFolder() {
+		recursivelyDelete(folder);
+	}
+
+	private void recursivelyDelete(File file) {
+		File[] files = file.listFiles();
+		if (files != null) {
+			for (File each : files) {
+				recursivelyDelete(each);
+			}
+		}
+		file.delete();
+	}
+}
+```
+
+
 
 
 ## Wie helfen Rules, JUnit Tests einfacher zu formulieren?
