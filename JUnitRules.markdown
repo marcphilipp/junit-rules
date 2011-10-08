@@ -2,27 +2,15 @@
 
 Marc Philipp, andrena objects ag
 
-> TODO: Vorspann
+> Automatisierte Tests sind aus der heutigen Softwareentwicklung nicht mehr wegzudenken. JUnit ist das älteste und bekannteste Testing Framework für Java. Doch selbst ein so etabliertes und einfach zu benutzendes Framework wird kontinuierlich weiterentwickelt. Die Neuerungen bieten Entwicklern noch mächtigere Möglichkeiten, Tests zu schreiben und zu strukturieren.
 
-## Über JUnit
+Der Legende nach haben Kent Beck und Erich Gamma den Kern von JUnit auf dem Weg zu einer Konferenz im Flugzeug zwischen Zürich und Atlanta im Jahr 1997 geschrieben. Ihre Idee war ein Testing Framework zu schreiben, dessen Zielgruppe explizit Programmierer sind, also dieselben Leute, die auch den Code schreiben, den es zu testen gilt.
 
-Kent Beck:
+JUnit ist inzwischen weit verbreitet und wird nicht nur zum Schreiben von Unit Tests verwendet, sondern auch zur Automatisierung von Integrations- und Akzeptanztests eingesetzt. Viele erfolgreiche Open Source Projekte zeichnen sich dadurch aus, dass mit der Zeit immer neue Features eingebaut werden. Das Ergebnis ist häufig, dass die einst simple Bibliothek unübersichtlich und schwer wartbar geworden ist.
 
-> A programmer-oriented testing framework for Java.
+JUnit geht hier gezielt einen anderen Weg. David Saff, neben Kent Beck der zweite Maintainer von JUnit, sieht das so: „JUnit is the intersection of all possible useful Java test frameworks, not their union.”. Die Wahrnehmung in der Java-Entwicklergemeinde ist entsprechend: Da JUnit so einfach ist, meint jeder, der es schon einmal benutzt hat, es gut zu kennen. Das ist einerseits gut, denn die Hürde Unit Tests zu schreiben ist so sehr gering. Andererseits führt es dazu, dass neue Neuerungen von vielen Entwicklern entweder gar nicht oder erst verzögert wahrgenommen werden. 
 
-David Saff:
-
-> JUnit is the intersection of all possible useful Java test frameworks, not their union.
-
-Nicht nur für Unit Tests!
-
-## Motivation
-
-Jeder meint, JUnit zu kennen: JUnit ist einfach. Neue Features? Gibt's nicht. Oder?
-
-Wenn man nach Entwicklerkollegen nach Neuerungen in JUnit frägt, wird häufig die Umstellung von Vererbung auf Annotation-basierte Testschreibweise in Version 4.0 erwähnt.
-
-Seitdem hat sich allerdings einiges getan:
+Wenn man nach Entwicklerkollegen nach Neuerungen in JUnit frägt, wird häufig die Umstellung von Vererbung auf Annotation-basierte Testschreibweise in Version 4.0 erwähnt. Seitdem hat sich allerdings einiges getan:
 
 - Matchers: Flexiblere, lesbarere Assertions mit `assertThat` und [Hamcrest](http://code.google.com/p/hamcrest/) Matchers.
 - Theories: Formulierung von Tests als Eigenschaften mit Vor- und Nachbedingungen (Assumptions).
