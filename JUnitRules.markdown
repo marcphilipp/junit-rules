@@ -8,31 +8,13 @@ Der Legende nach haben Kent Beck und Erich Gamma den Kern von JUnit auf dem Weg 
 
 JUnit ist inzwischen weit verbreitet und wird nicht nur zum Schreiben von Unit Tests verwendet, sondern auch zur Automatisierung von Integrations- und Akzeptanztests eingesetzt. Viele erfolgreiche Open Source Projekte zeichnen sich dadurch aus, dass mit der Zeit immer neue Features eingebaut werden. Das Ergebnis ist häufig, dass die einst simple Bibliothek unübersichtlich und schwer wartbar geworden ist.
 
-JUnit geht hier gezielt einen anderen Weg. David Saff, neben Kent Beck der zweite Maintainer von JUnit, sieht das so: „JUnit is the intersection of all possible useful Java test frameworks, not their union.”. Die Wahrnehmung in der Java-Entwicklergemeinde ist entsprechend: Da JUnit so einfach ist, meint jeder, der es schon einmal benutzt hat, es gut zu kennen. Das ist einerseits gut, denn die Hürde Unit Tests zu schreiben ist so sehr gering. Andererseits führt es dazu, dass neue Neuerungen von vielen Entwicklern entweder gar nicht oder erst verzögert wahrgenommen werden. 
+JUnit geht hier gezielt einen anderen Weg. David Saff, neben Kent Beck der zweite Maintainer von JUnit, sieht das so: „JUnit is the intersection of all possible useful Java test frameworks, not their union”. Die Wahrnehmung in der Java-Entwicklergemeinde ist dementsprechend: Da JUnit so einfach ist, meint jeder, der es schon einmal benutzt hat, es gut zu kennen. Das ist einerseits gut, denn die Hürde Unit Tests zu schreiben ist so sehr gering. Andererseits führt es dazu, dass Neuerungen von vielen Entwicklern entweder gar nicht oder erst verzögert wahrgenommen werden. 
 
-Wenn man nach Entwicklerkollegen nach Neuerungen in JUnit frägt, wird häufig die Umstellung von Vererbung auf Annotation-basierte Testschreibweise in Version 4.0 erwähnt. Seitdem hat sich allerdings einiges getan:
-
-- Matchers: Flexiblere, lesbarere Assertions mit `assertThat` und [Hamcrest](http://code.google.com/p/hamcrest/) Matchers.
-- Theories: Formulierung von Tests als Eigenschaften mit Vor- und Nachbedingungen (Assumptions).
-- Categories: Tests in Kategorien einteilen und in separaten in Testsuiten ausführen.
-
-Aber: Rules sind am wichtigsten, weil ...
-
-- Wiederverwendbarkeit: Ermöglichen häufig benötigten SetUp/TearDown-Code in Klassen auszulagern, die sich auf einen Aspekt konzentrieren. 
-- Kombinierbarkeit: Beliebig viele Regeln in einem Test verwendbar. Machen eigene Custom Test Runner (High Lander Prinzip) überflüssig.
-- Delegation statt Vererbung: Helfen Testklassenhierarchien zu vermeiden! Keine Utility-Methoden mehr in Testoberklassen.
-- Erweiterbarkeit: Eigene Regeln schreiben ist einfach!
-
-Kent Beck ([Interceptors in JUnit](http://www.threeriversinstitute.org/blog/?p=155)):
-
-> Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.
-
-Rules wurden in JUnit 4.9 nochmals erweitert und lassen sich nun auch auf Klassenebene (ähnlich wie `@BeforeClass`/`@AfterClass`) und in Testsuiten (mit dem `Suite` Runner) verwenden.
-
-In Version 4.10 wurde eine weitere Rule eingeführt, die es ermöglicht die Reihenfolge in der Rules ausgeführt werden, zu kontrollieren (`RuleChain`).
-
+Wenn man nach Entwicklerkollegen nach Neuerungen in JUnit frägt, wird häufig die Umstellung von Vererbung auf Annotation-basierte Testschreibweise in Version 4.0 erwähnt. Seitdem hat sich allerdings einiges getan. Die neuste Innovation, die mit Version 4.7 eingeführt wurde, heißt Rules. Zugegeben, unter dem Begriff kann man sich erst einmal nichts vorstellen. Wenn man sich diese „Regeln” für Tests aber einmal eingehend angesehen hat -- und genau das werden wir im Rest des Artikels tun -- stellt man fest: Rules werden die Art wie wir JUnit Tests schreiben nachhaltig verändern.
 
 ## Definition von Rules
+
+Was ist eine Rule und wie hilft sie einem, JUnit Tests einfacher zu formulieren?
 
 ### [Jens Schauder](http://blog.schauderhaft.de/2009/10/04/junit-rules/)
 
@@ -56,6 +38,20 @@ TODO:
 
 TODO
 
+## Fazit
+
+Kent Beck ([Interceptors in JUnit](http://www.threeriversinstitute.org/blog/?p=155)):
+
+> Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.
+
+### Vorteile von Rules
+
+- Wiederverwendbarkeit: Ermöglichen häufig benötigten SetUp/TearDown-Code in Klassen auszulagern, die sich auf einen Aspekt konzentrieren. 
+- Kombinierbarkeit: Beliebig viele Regeln in einem Test verwendbar. Machen eigene Custom Test Runner (High Lander Prinzip) überflüssig.
+- Delegation statt Vererbung: Helfen Testklassenhierarchien zu vermeiden! Keine Utility-Methoden mehr in Testoberklassen.
+- Erweiterbarkeit: Eigene Regeln schreiben ist einfach!
+
+
 ---------------------------------------
 
-*Marc Philipp* (andrena objects ag) beschäftigt sich neben seiner Tätigkeit als Softwareentwickler mit der Arbeit an Entwicklungswerkzeugen, insbesondere JUnit und Usus.
+*Marc Philipp* (andrena objects ag) beschäftigt sich neben seiner Tätigkeit als Softwareentwickler mit der Arbeit an Entwicklungswerkzeugen.
