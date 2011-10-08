@@ -12,23 +12,25 @@ JUnit geht hier gezielt einen anderen Weg. David Saff, neben Kent Beck der zweit
 
 Wenn man nach Entwicklerkollegen nach Neuerungen in JUnit frägt, wird häufig die Umstellung von Vererbung auf Annotation-basierte Testschreibweise in Version 4.0 erwähnt. Seitdem hat sich allerdings einiges getan. Die neuste Innovation, die mit Version 4.7 eingeführt wurde, heißt Rules. Zugegeben, unter dem Begriff kann man sich erst einmal nichts vorstellen. Wenn man sich diese „Regeln” für Tests aber einmal eingehend angesehen hat -- und genau das werden wir im Rest des Artikels tun -- stellt man fest: Rules werden die Art wie wir JUnit Tests schreiben nachhaltig verändern.
 
-## Definition von Rules
+## Was sind Rules?
 
-Was ist eine Rule und wie hilft sie einem, JUnit Tests einfacher zu formulieren?
+Was Rules sind, erklärt man am desten anhand ihrer Verwendung. Mithilfe der `@Rule` Annotation markiert man Instanzvariablen einer Testklasse. Diese Felder müssen `public` und vom Typ `TestRule` oder einer Implementierung dieses Interface sein. Eine so definierte Regel wirkt sich nun auf die Ausführung jeder Testmethode in der Testklasse aus. Ähnlich einem Aspekt in der aspektorientierten Programmierung (AOP) kann die Rule Code vor, nach oder anstelle der Testmethode ausführen [[1]](http://blog.schauderhaft.de/2009/10/04/junit-rules/).
 
-### [Jens Schauder](http://blog.schauderhaft.de/2009/10/04/junit-rules/)
+Das klingt zunächst ziemlich abstrakt. Um das ganze ein bisschen konkreter zu machen, schauen wir uns am besten ein Beispiel an.
 
-The purpose of the `@Rule` annotation is to mark public fields of a test class. These fields must be of type `TestRule`, or an implementing class. Such MethodRules behave similar to a AOP aspects, of course without use of any AOP library and specialized for Tests. They can execute code before, after or instead of a test method. 
+TODO Beispiel
 
 
-## Einsatzbeispiele
+## Wie helfen Rules, JUnit Tests einfacher zu formulieren?
+
+### Einsatzmöglichkeiten
 
 - Benachrichtigung über die Testausführung (siehe `TestWatchman`).
 - Vorbereitung vom Test verwendeter Ressourcen (z.B. Dateien, Server, Verbindungen) und sauberes Aufräumen nach Ausführung des Tests. Besonders wichtig, wenn die Ressourcen von mehreren Tests verwendet werden (z.B. `TemporaryFolder`).
 - Spezielle Überprüfungen nach oder vor jedem Test, die den Tests beispielsweise fehlschlagen lassen können. Beispiel `ErrorCollector`: Sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus.
 - Informationen über den Test innerhalb des Tests verfügbar machen (z.B. den Namen des Tests: `TestName`).
 
-## Beispiele
+### Weitere Beispiele
 
 TODO:
 
