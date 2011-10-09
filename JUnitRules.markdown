@@ -261,7 +261,7 @@ public class LocalTimeouts {
 TODO: Erst Ausführung generell erklären, dann Problem 
 
 
-## Schreib deine eigenen Regeln!
+## Fazit: Schreib deine eigenen Regeln!
 
 Warum sollte ich Rules verwenden?
 
