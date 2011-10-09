@@ -139,6 +139,21 @@ public class BeepOnFailure extends TestWatcher {
 ~~~
 
 
+### Bereitstellung von Informationen über den Test
+
+Eine Rule kann außerdem Informationen über den Test innerhalb des Tests verfügbar machen. So kann man mit der `TestName` Rule etwa auf den Namen des aktuellen Tests zugreifen.
+
+~~~java
+public class NameRuleTest {
+	@Rule public TestName test = new TestName();
+
+	@Test public void test() {
+		assertThat(test.getMethodName(), is("test"));
+	}
+}
+~~~
+
+
 ### Überprüfungen vor/nach der Tests
 
 Desweiteren lassen sich spezielle Überprüfungen, die den Tests beispielsweise fehlschlagen lassen können, vor oder nach jedem Test ausführen. Der `ErrorCollector` sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus. So kann man etwa alle Elemente in einer Liste überprüfen und den Test erst am Ende fehlschlagen lassen, wenn die Überprüfung eines oder mehrerer Elemente fehlgeschlagen ist.
@@ -155,9 +170,11 @@ public class ErrorCollectingTest {
 }
 ~~~
 
+TODO: Ausgabe
+
 Eigene Rules, die zusätzliche Überprüfungen durchführen können, lassen sich bequem implementieren, indem man von der Klasse `Verifier` ableitet und die `verify()`-Methode implementiert.
 
-Rules können jedoch nicht nur bewirken, dass ein Test, der ohne die Rule grün wäre, rot wird. Auch das Gegenteil ist möglich. Ein gutes Beispiel dafür stellt die `ExpectedException`-Rule dar, die einen Test nur als erfolgreich markiert, wenn eine bestimmte Exception aufgetreten ist.
+Rules können jedoch nicht nur bewirken, dass ein Test, der ohne die Rule grün wäre, rot wird. Auch das Gegenteil ist möglich. Ein gutes Beispiel dafür stellt die `ExpectedException`-Rule dar, die einen Test nur dann als erfolgreich markiert, wenn eine bestimmte Exception aufgetreten ist.
 
 ~~~java
 public class ExpectedExceptionWithRule {
@@ -204,22 +221,38 @@ public class ExpectedExceptionWithoutRule {
 
 Nun lässt sich sowohl Klasse als auch Nachricht über die gleiche Notation testen.
 
-TODO: `Timeout`-Rule
-
-
-### Bereitstellung von Informationen über den Test
-
-Eine Rule kann außerdem Informationen über den Test innerhalb des Tests verfügbar machen. So kann man mit der `TestName` Rule etwa auf den Namen des aktuellen Tests zugreifen.
+Die `@Test`-Annotation hat einen weitere optionalen Parameter: `timeout`. Auch dafür gibt es nun eine Rule, die sich einsetzen lässt, wenn für alle Tests in einer Testklasse der gleiche Timeout gelten soll. Folgende beide Tests sind äquivalent:
 
 ~~~java
-public class NameRuleTest {
-	@Rule public TestName test = new TestName();
+public class GlobalTimeouts {
 
-	@Test public void test() {
-		assertThat(test.getMethodName(), is("test"));
+	@Rule public Timeout timeout = new Timeout(20);
+
+	@Test public void firstTest() {
+		while (true) {}
+	}
+
+	@Test public void secondTest() {
+		for (;;) {}
 	}
 }
 ~~~
+
+~~~java
+public class LocalTimeout {
+
+	@Test(timeout = 20)
+	public void firstTest() {
+		while (true) {}
+	}
+
+	@Test(timeout = 20)
+	public void secondTest() {
+		for (;;) {}
+	}
+}
+~~~
+
 
 ### ClassRules (4.9)
 
