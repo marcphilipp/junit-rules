@@ -266,7 +266,31 @@ public class LocalTimeouts {
 ~~~
 
 
-### ClassRules (4.9)
+### ClassRules
+
+Alle Rules, die wir bisher gesehen haben, wurden für jede Methode einzeln angewandt, genauso wie Methoden, die mit `@Before` und `@After` annotiert sind, vor bzw. nach jedem Test ausgeführt werden. Manchmal möchte man allerdings die Möglichkeit haben, Code nur einmal vor der ersten bzw. nach der letzten Testmethode in einer Klasse auszuführen. Ein häufiger Anwendungsfall sind Integrationstests, die eine Verbindung zu einem Server aufbauen und wieder schließen müssen. Das war bisher nur mit den Annotations `@BeforeClass` bzw. `@AfterClass` möglich, Rules konnte man dazu nicht verwenden. Um dieses Problem zu lösen, wurden in JUnit 4.9 ClassRules eingeführt.
+
+Ähnlich einer normalen Rule definiert man ein Feld in der Testklasse. Analog zu `@BeforeClass`-/`@AfterClass`-Methoden muss dieses Feld `public` und `static` sein. Der Typ des Feldes muss wie bei der `@Rule`-Annotation das `TestRule`-Interface implementieren. Eine solche Rule lässt sich nicht nur in einer normalen Testklasse verwenden, sondern auch in einer Test-Suite, wie das folgende Beispiel aus den Release Notes [[2]](https://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.9.txt) illustriert:
+
+~~~java
+@RunWith(Suite.class)
+@SuiteClasses({A.class, B.class, C.class})
+public class UsesExternalResource {
+	public static Server myServer = new Server();
+
+	@ClassRule
+	public static ExternalResource connection = new ExternalResource() {
+	
+		@Override protected void before() throws Throwable {
+			myServer.connect();
+		};
+
+		@Override protected void after() {
+			myServer.disconnect();
+		};
+	};
+}
+~~~
 
 ### RuleChain (4.10)
 
