@@ -138,6 +138,18 @@ public class BeepOnFailure extends TestWatcher {
 }
 ~~~
 
+Die Benutzung in einem Test sieht dann so aus:
+
+~~~java
+public class FailingTestThatBeeps {
+	
+	@Rule public BeepOnFailure beep = new BeepOnFailure();
+
+	@Test public void test() {
+		fail();
+	}
+}
+~~~
 
 ### Bereitstellung von Informationen über den Test
 
