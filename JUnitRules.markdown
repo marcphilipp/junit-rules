@@ -1,4 +1,4 @@
-# JUnit Rules!
+# JUnit Rules
 
 Marc Philipp, andrena objects ag
 
@@ -224,7 +224,7 @@ Nun lässt sich sowohl Klasse als auch Nachricht über die gleiche Notation test
 Die `@Test`-Annotation hat einen weitere optionalen Parameter: `timeout`. Auch dafür gibt es nun eine Rule, die sich einsetzen lässt, wenn für alle Tests in einer Testklasse der gleiche Timeout gelten soll. Folgende beide Tests sind äquivalent:
 
 ~~~java
-public class GlobalTimeouts {
+public class GlobalTimeout {
 
 	@Rule public Timeout timeout = new Timeout(20);
 
@@ -239,7 +239,7 @@ public class GlobalTimeouts {
 ~~~
 
 ~~~java
-public class LocalTimeout {
+public class LocalTimeouts {
 
 	@Test(timeout = 20)
 	public void firstTest() {
