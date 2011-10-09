@@ -4,7 +4,9 @@ Marc Philipp, andrena objects ag
 
 _Automatisierte Tests sind aus der heutigen Softwareentwicklung nicht mehr wegzudenken. JUnit ist das älteste und bekannteste Testing Framework für Java. Doch selbst ein so etabliertes und einfach zu benutzendes Framework wird kontinuierlich weiterentwickelt. Die Neuerungen bieten Entwicklern noch mächtigere Möglichkeiten, Tests zu schreiben und zu strukturieren._
 
---------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+
+
 
 Der Legende nach haben Kent Beck und Erich Gamma den Kern von JUnit auf dem Weg zu einer Konferenz im Flugzeug zwischen Zürich und Atlanta im Jahr 1997 geschrieben. Ihre Idee war ein Testing Framework, dessen Zielgruppe explizit Programmierer sind, also dieselben Leute, die auch den Code schreiben, den es zu testen gilt.
 
@@ -13,6 +15,8 @@ JUnit ist inzwischen weit verbreitet. Es wird nicht nur zum Schreiben von Unit T
 JUnit geht hier gezielt einen anderen Weg. David Saff, neben Kent Beck der zweite Maintainer von JUnit, sieht das so: „JUnit is the intersection of all possible useful Java test frameworks, not their union”. Die Wahrnehmung in der Java-Entwicklergemeinde ist dementsprechend: Da JUnit so einfach ist, meint jeder, der es schon einmal benutzt hat, es gut zu kennen. Das ist einerseits gut, denn die Hürde Unit Tests zu schreiben ist so sehr niedrig. Andererseits führt es dazu, dass Neuerungen von vielen Entwicklern entweder gar nicht oder erst verzögert wahrgenommen werden. 
 
 Wenn man nach Entwicklerkollegen nach Neuerungen in JUnit frägt, wird häufig die Umstellung von Vererbung auf Annotation-basierte Testschreibweise in Version 4.0 erwähnt. Seitdem hat sich allerdings einiges getan. Die neuste Innovation, die mit Version 4.7 eingeführt wurde, heißt Rules. Zugegeben, unter dem Begriff kann man sich erst einmal nichts vorstellen. Wenn man sich diese „Regeln” für Tests aber einmal eingehend angesehen hat -- und genau das werden wir in diesem Artikel tun -- stellt man fest: Rules werden die Art, wie wir JUnit Tests schreiben, nachhaltig verändern.
+
+
 
 ## Was sind Rules?
 
@@ -68,9 +72,12 @@ public class TemporaryFolderWithoutRule {
 }
 ~~~
 
-In diesem Fall hat uns die `TemporaryFolder`-Rule also geholfen, den Test wesentlich kürzer und prägnanter zu formulieren.
+In diesem Fall hat die `TemporaryFolder`-Rule also geholfen, den Test wesentlich kürzer und prägnanter zu formulieren.
+
+
 
 ## Wozu kann ich Rules verwenden?
+
 
 ### Bereitstellung externe Ressourcen
 
@@ -117,6 +124,7 @@ public class SomeTestUsingSystemProperty {
 }
 ~~~
 
+
 ### Benachrichtigung über die Testausführung
 
 Da man mit einer Rule Code vor und nach dem Aufruf der Testmethoden ausführen kann, lässt sich damit eine Benachrichtigung über die Testausführung realisieren. Dazu stellt JUnit die abstrakte Oberklasse `TestWatcher` bereit. Diese besitzt vier leer implementierte Methoden, die man nach Bedarf überschreiben und implementieren kann: `starting()`, `succeeded()`, `failed()` und `finished()`:
@@ -130,14 +138,88 @@ public class BeepOnFailure extends TestWatcher {
 }
 ~~~
 
+
 ### Überprüfungen vor/nach der Tests
 
-Desweiteren lassen sich spezielle Überprüfungen, die den Tests beispielsweise fehlschlagen lassen können, vor oder nach jedem Test ausführen. Der `ErrorCollector` sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus.
+Desweiteren lassen sich spezielle Überprüfungen, die den Tests beispielsweise fehlschlagen lassen können, vor oder nach jedem Test ausführen. Der `ErrorCollector` sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus. So kann man etwa alle Elemente in einer Liste überprüfen und den Test erst am Ende fehlschlagen lassen, wenn die Überprüfung eines oder mehrerer Elemente fehlgeschlagen ist.
+
+~~~java
+public class ErrorCollectingTest {
+
+	@Rule public ErrorCollector collector = new ErrorCollector();
+
+	@Test public void test() {
+		collector.checkThat(1 + 1, is(3));
+		collector.addError(new Exception("something went wrong"));
+	}
+}
+~~~
+
+Eigene Rules, die zusätzliche Überprüfungen durchführen können, lassen sich bequem implementieren, indem man von der Klasse `Verifier` ableitet und die `verify()`-Methode implementiert.
+
+Rules können jedoch nicht nur bewirken, dass ein Test, der ohne die Rule grün wäre, rot wird. Auch das Gegenteil ist möglich. Ein gutes Beispiel dafür stellt die `ExpectedException`-Rule dar, die einen Test nur als erfolgreich markiert, wenn eine bestimmte Exception aufgetreten ist.
+
+~~~java
+public class ExpectedExceptionWithRule {
+
+	int[] threeNumbers = { 1, 2, 3 };
+
+	@Rule public ExpectedException thrown = ExpectedException.none();
+
+	@Test public void exception() {
+		thrown.expect(ArrayIndexOutOfBoundsException.class);
+		threeNumbers[3] = 4;
+	}
+
+	@Test public void exceptionWithMessage() {
+		thrown.expect(ArrayIndexOutOfBoundsException.class);
+		thrown.expectMessage("3");
+		threeNumbers[3] = 4;
+	}
+}
+~~~
+
+Natürlich lässt sich das auch mit herkömmlichen Mitteln erreichen, den dafür ist ja eigentlich der `expected`-Parameter der `@Test`-Annotation vorgesehen. Möchte man aber auch die Nachricht der Exception testen, war man bisher gezwungen, auf einen `try`-`catch`-Block auszuweichen:
+
+~~~java
+public class ExpectedExceptionWithoutRule {
+
+	int[] threeNumbers = { 1, 2, 3 };
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void exception() {
+		threeNumbers[3] = 4;
+	}
+
+	@Test public void exceptionWithMessage() {
+		try {
+			threeNumbers[3] = 4;
+			fail("ArrayIndexOutOfBoundsException expected");
+		} catch (ArrayIndexOutOfBoundsException expected) {
+			assertEquals("3", expected.getMessage());
+		}
+	}
+}
+~~~
+
+Nun lässt sich sowohl Klasse als auch Nachricht über die gleiche Notation testen.
+
+TODO: `Timeout`-Rule
+
 
 ### Bereitstellung von Informationen über den Test
 
 Eine Rule kann außerdem Informationen über den Test innerhalb des Tests verfügbar machen. So kann man mit der `TestName` Rule etwa auf den Namen des aktuellen Tests zugreifen.
 
+~~~java
+public class NameRuleTest {
+	@Rule public TestName test = new TestName();
+
+	@Test public void test() {
+		assertThat(test.getMethodName(), is("test"));
+	}
+}
+~~~
 
 ### ClassRules (4.9)
 
