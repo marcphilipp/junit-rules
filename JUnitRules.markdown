@@ -221,7 +221,7 @@ public class ExpectedExceptionWithoutRule {
 
 Nun lässt sich sowohl Klasse als auch Nachricht über die gleiche Notation testen.
 
-Die `@Test`-Annotation hat einen weitere optionalen Parameter: `timeout`. Auch dafür gibt es nun eine Rule, die sich einsetzen lässt, wenn für alle Tests in einer Testklasse der gleiche Timeout gelten soll. Folgende beide Tests sind äquivalent:
+Die `@Test`-Annotation hat einen weitere optionalen Parameter: `timeout`. Auch dafür gibt es nun eine Rule, die sich einsetzen lässt, wenn für alle Tests in einer Testklasse der gleiche Timeout gelten soll. Die beiden folgenden Tests sind äquivalent:
 
 ~~~java
 public class GlobalTimeout {
