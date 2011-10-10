@@ -70,7 +70,7 @@ public class TemporaryFolderWithoutRule {
 }
 ~~~
 
-In diesem Fall hat die `TemporaryFolder`-Rule also geholfen, den Test wesentlich kürzer und prägnanter zu formulieren.
+In diesem Fall hat die `TemporaryFolder`-Rule also geholfen, den Test wesentlich kürzer und prägnanter zu formulieren. Zudem haben wir keine Hilfsmethoden in der Testklasse benötigt, der Code zum Anlegen und Löschen eines temporären Ordners ist in einer Klasse gekapselt, die in anderen Tests wiederverwendet werden kann.
 
 
 
@@ -290,7 +290,12 @@ public class UsesExternalResource {
 }
 ~~~
 
-### RuleChain (4.10)
+
+### Mehrere Regeln kombinieren
+
+TODO: Beispiel für Kombinierbarkeit
+
+#### RuleChain (4.10)
 
 TODO: Erst Ausführung generell erklären, dann Problem 
 
