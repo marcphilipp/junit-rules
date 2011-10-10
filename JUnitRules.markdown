@@ -339,13 +339,12 @@ Die erste Regel (`outer rule`) umschließt also die mittlere (`middle rule`) und
 
 ## Schreib deine eigenen Regeln!
 
-Warum sollte ich Rules verwenden?
+Warum sollte man also Rules verwenden? Ein großer Pluspunkt von Rules ist ihre *Wiederverwendbarkeit*. Sie ermöglichen häufig benutzen `SetUp`/`TearDown`-Code in eine eigene `TestRule`-Klasse, die nur eine Verantwortlichkeit hat, auszulagern.
 
-Kent Beck ([Interceptors in JUnit](http://www.threeriversinstitute.org/blog/?p=155)):
+Ein weiterer Vorteil ist die *Kombinierbarkeit* von Rules. Wie wir in diesem Artikel gesehen haben, lassen sich beliebig viele Regeln in einem Test verwenden, sowohl aus Klassen- als auch auf Methodenebene. Viele Dinge, für die es in der Vergangenheit eines eigenen Test Runners bedurfte, lassen sich nun mit Rules ebenso implementieren. Da man immer nur einen Test Runner aber beliebig viele Rules verwenden kann, stehen einem so nun deutlich mehr Möglichkeiten offen. 
 
-> Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.
+Rules sind die Umsetzung von *Delegation statt Vererbung* für Unit Tests. Wo früher Testklassenhierarchien mit Utility-Methoden gewuchert sind, kann man jetzt auf einfache Art und Weise verschiedene Rules kombinieren. 
 
-- Wiederverwendbarkeit: Ermöglichen häufig benötigten SetUp/TearDown-Code in Klassen auszulagern, die sich auf einen Aspekt konzentrieren. 
-- Kombinierbarkeit: Beliebig viele Regeln in einem Test verwendbar. Machen eigene Custom Test Runner (High Lander Prinzip) überflüssig.
-- Delegation statt Vererbung: Helfen Testklassenhierarchien zu vermeiden! Keine Utility-Methoden mehr in Testoberklassen.
-- Erweiterbarkeit: Eigene Regeln schreiben ist einfach!
+Die vorgestellten, konkreten Rules sind demonstrieren lediglich die Vielfältigkeit der Einsatzmöglichkeiten. Eigene Regeln zu schreiben ist Dank der zur Verfügung gestellten Basisklassen einfach. Erst diese *Erweiterbarkeit* macht Rules zu einem wirklichen Novum.
+
+Die Macher von JUnit setzen jedenfalls für die Zukunft von JUnit voll auf den Einsatz und die Erweiterung von Rules. Kent Beck schreibt darüber in seinem Blog [[4]](http://www.threeriversinstitute.org/blog/?p=155)): „Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.”
