@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+# Usage: redcarpet [<file>...]
+
+require 'rubygems'
+require 'redcarpet'
+
+STDOUT.write(Redcarpet.new(ARGF.read, :fenced_code).to_html)
+
