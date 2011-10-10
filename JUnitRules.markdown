@@ -300,7 +300,29 @@ TODO: Beispiel für Kombinierbarkeit
 
 Das funktioniert wunderbar solange die Rules voneinander unabhängig sind. JUnit macht absichtlich keinerlei Zusicherungen was die Reihenfolge der Abarbeitung von Rules angeht [[3]](http://tech.groups.yahoo.com/group/junit/message/23537). Manchmal möchte man aber dennoch eine bestimmte Reihenfolge vorgeben. Angenommen man hat zwei Rules, von denen die erste eine bestimmte Ressource zur Verfügung stellt, die von der zweiten Rule benutzt wird. Dann möchte man sehr wohl sicherstellen, dass zuerst die Ressource bereitgestellt wird, bevor sie konsumiert wird. Dafür wurde in JUnit 4.10 die `RuleChain`-Klasse eingeführt. `RuleChain` implementiert selbst das `TestRule`-Interface, kann also verwendet werden, wie eine normale Rule:
 
-TODO: Beispiel
+~~~java
+public class UseRuleChain {
+	@Rule
+	public TestRule chain = RuleChain.outerRule(new LoggingRule("outer rule"))
+			.around(new LoggingRule("middle rule"))
+			.around(new LoggingRule("inner rule"));
+	@Test
+	public void test() {}
+}
+~~~
+
+Wenn man diesen Test ausführt, erhält man folgende Ausgabe:
+
+~~~
+starting outer rule
+starting middle rule
+starting inner rule
+finished inner rule
+finished middle rule
+finished outer rule
+~~~
+
+Die erste Regel (`outer rule`) umschließt also die mittlere (`middle rule`) und diese wiederum die dritte und letzte (`inner rule`).
 
 
 ## Schreib deine eigenen Regeln!
