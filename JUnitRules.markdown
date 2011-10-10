@@ -2,11 +2,9 @@
 
 Marc Philipp, andrena objects ag
 
-_Automatisierte Tests sind aus der heutigen Softwareentwicklung nicht mehr wegzudenken. JUnit ist das älteste und bekannteste Testing Framework für Java. Doch selbst ein so etabliertes und einfach zu benutzendes Framework wird kontinuierlich weiterentwickelt. Die Neuerungen bieten Entwicklern noch mächtigere Möglichkeiten, Tests zu schreiben und zu strukturieren._
+_Automatisierte Tests sind aus der heutigen Softwareentwicklung nicht mehr wegzudenken. JUnit ist das älteste und bekannteste Testing Framework für Java. Doch selbst ein so etabliertes und einfach zu benutzendes Framework wird kontinuierlich weiterentwickelt. Eine der Neuerungen sind JUnit Rules, die Entwicklern eine neue mächtige Möglichkeit bieten, Tests zu formulieren und besser zu strukturieren._
 
 -----------------------------------------------------------------------------------------------------------------------
-
-
 
 Der Legende nach haben Kent Beck und Erich Gamma den Kern von JUnit auf dem Weg zu einer Konferenz im Flugzeug zwischen Zürich und Atlanta im Jahr 1997 geschrieben. Ihre Idee war ein Testing Framework, dessen Zielgruppe explizit Programmierer sind, also dieselben Leute, die auch den Code schreiben, den es zu testen gilt.
 
