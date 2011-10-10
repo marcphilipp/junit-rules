@@ -326,7 +326,7 @@ public class CombiningMultipleRules {
 }
 ~~~
 
-Das funktioniert wunderbar solange die Rules voneinander unabhängig sind. JUnit macht absichtlich keinerlei Zusicherungen was die Reihenfolge der Abarbeitung von Rules angeht [[3]][KentBeckRuleChain]. Manchmal möchte man aber dennoch eine bestimmte Reihenfolge vorgeben. Angenommen man hat zwei Rules, von denen die erste eine bestimmte Ressource zur Verfügung stellt, die von der zweiten Rule benutzt wird. Dann möchte man sehr wohl sicherstellen, dass zuerst die Ressource bereitgestellt wird, bevor sie konsumiert wird. Dafür wurde in JUnit 4.10 die `RuleChain`-Klasse eingeführt. `RuleChain` implementiert selbst das `TestRule`-Interface, kann also verwendet werden, wie eine normale Rule:
+Das funktioniert wunderbar, solange die Rules voneinander unabhängig sind. JUnit macht absichtlich keinerlei Zusicherungen was die Reihenfolge der Abarbeitung von Rules angeht [[3]][KentBeckRuleChain]. Manchmal möchte man aber dennoch eine bestimmte Reihenfolge vorgeben. Angenommen man hat zwei Rules, von denen die erste eine bestimmte Ressource zur Verfügung stellt, die von der zweiten Rule benutzt wird. Dann möchte man sehr wohl sicherstellen, dass zuerst die Ressource bereitgestellt wird, bevor sie konsumiert wird. Dafür wurde in JUnit 4.10 die `RuleChain`-Klasse eingeführt. `RuleChain` implementiert selbst das `TestRule`-Interface, kann also verwendet werden, wie eine normale Rule:
 
 ~~~java
 public class UseRuleChain {
