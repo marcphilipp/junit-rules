@@ -7,7 +7,8 @@ import org.junit.runner.Description;
 
 public class BeepOnFailure extends TestWatcher {
 
-    @Override protected void failed(Throwable e, Description description) {
-        Toolkit.getDefaultToolkit().beep();
-    }
+	@Override
+	protected void failed(Throwable e, Description description) {
+		Toolkit.getDefaultToolkit().beep();
+	}
 }
