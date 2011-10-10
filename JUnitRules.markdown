@@ -77,7 +77,7 @@ In diesem Fall hat die `TemporaryFolder`-Rule also geholfen, den Test wesentlich
 ## Wozu kann ich Rules verwenden?
 
 
-### Bereitstellung externe Ressourcen
+### Bereitstellung externer Ressourcen
 
 Den häufigsten Anwendungsfall, insbesondere bei Integrationstests, haben wir bereits gesehen: die Vorbereitung vom Test verwendeter externer Ressourcen (z.B. Dateien, Server, Verbindungen) inklusive dem sauberen Aufräumen nach Ausführung des Tests. Besonders wichtig ist dies, wenn die Ressource von mehreren Tests verwendet werden. `TemporaryFolder` ist eine beispielhafte Implementierung für eine solche Rule. 
 
