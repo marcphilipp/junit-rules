@@ -293,10 +293,22 @@ public class UsesExternalResource {
 
 ### Mehrere Regeln kombinieren
 
-Einen weiteren Vorteil von Rules gegenüber Hilfsmethoden in Testoberklassen stellt ihre Kombinierbarkeit dar. Es lassen sich beliebig viele Rules in einem Test verwenden.
+Einen weiteren Vorteil von Rules gegenüber Hilfsmethoden in Testoberklassen stellt ihre Kombinierbarkeit dar. Es lassen sich beliebig viele Rules in einem Test verwenden:
 
+~~~java
+public class CombiningMultipleRules {
 
-TODO: Beispiel für Kombinierbarkeit
+	@Rule public TestRule beep = new BeepOnFailure();
+	@Rule public ExpectedException exceptions = ExpectedException.none();
+	@Rule public TestName test = new TestName();
+
+	@Test
+	public void test() {
+		exceptions.expect(IllegalArgumentException.class);
+		throw new RuntimeException("Hello from " + test.getMethodName());
+	}
+}
+~~~
 
 Das funktioniert wunderbar solange die Rules voneinander unabhängig sind. JUnit macht absichtlich keinerlei Zusicherungen was die Reihenfolge der Abarbeitung von Rules angeht [[3]](http://tech.groups.yahoo.com/group/junit/message/23537). Manchmal möchte man aber dennoch eine bestimmte Reihenfolge vorgeben. Angenommen man hat zwei Rules, von denen die erste eine bestimmte Ressource zur Verfügung stellt, die von der zweiten Rule benutzt wird. Dann möchte man sehr wohl sicherstellen, dass zuerst die Ressource bereitgestellt wird, bevor sie konsumiert wird. Dafür wurde in JUnit 4.10 die `RuleChain`-Klasse eingeführt. `RuleChain` implementiert selbst das `TestRule`-Interface, kann also verwendet werden, wie eine normale Rule:
 
