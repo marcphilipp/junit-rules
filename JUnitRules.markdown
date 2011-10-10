@@ -4,8 +4,6 @@ Marc Philipp, andrena objects ag
 
 _Automatisierte Tests sind aus der heutigen Softwareentwicklung nicht mehr wegzudenken. JUnit ist das älteste und bekannteste Testing Framework für Java. Doch selbst ein so etabliertes und einfach zu benutzendes Framework wird kontinuierlich weiterentwickelt. Eine der Neuerungen sind JUnit Rules, die Entwicklern eine neue mächtige Möglichkeit bieten, Tests zu formulieren und besser zu strukturieren._
 
------------------------------------------------------------------------------------------------------------------------
-
 Der Legende nach haben Kent Beck und Erich Gamma 1997 den Kern von JUnit auf dem Weg zu einer Konferenz im Flugzeug zwischen Zürich und Atlanta geschrieben. Ihre Idee war ein Testing Framework, dessen Zielgruppe explizit Programmierer sind, also dieselben Leute, die auch den Code schreiben, den es zu testen gilt.
 
 JUnit ist inzwischen weit verbreitet. Es wird nicht nur zum Schreiben von Unit Tests verwendet, sondern auch zur Automatisierung von Integrations- und Akzeptanztests eingesetzt. Viele erfolgreiche Open Source Projekte zeichnen sich dadurch aus, dass mit der Zeit immer neue Features eingebaut werden. Dies führt jedoch häufig dazu, dass die einst simple Bibliothek unübersichtlich und schwer wartbar wird.
@@ -25,9 +23,11 @@ Das klingt zunächst recht abstrakt. Um das Ganze konkreter zu machen, schauen w
 ~~~java
 public class TemporaryFolderWithRule {
 
-	@Rule public TemporaryFolder folder = new TemporaryFolder();
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
-	@Test public void test() throws Exception {
+	@Test
+	public void test() throws Exception {
 		File file = folder.newFile("test.txt");
 		assertTrue(file.exists());
 	}
@@ -42,19 +42,22 @@ Würde man obigen Test auf herkömmliche Art und Weise schreiben, ohne die `Temp
 public class TemporaryFolderWithoutRule {
 	private File folder;
 
-	@Before public void createTemporaryFolder() throws Exception {
+	@Before
+	public void createTemporaryFolder() throws Exception {
 		folder = File.createTempFile("myFolder", "");
 		folder.delete();
 		folder.mkdir();
 	}
 
-	@Test public void test() throws Exception {
+	@Test
+	public void test() throws Exception {
 		File file = new File(folder, "test.txt");
 		file.createNewFile();
 		assertTrue(file.exists());
 	}
 
-	@After public void deleteTemporaryFolder() {
+	@After
+	public void deleteTemporaryFolder() {
 		recursivelyDelete(folder);
 	}
 
@@ -73,11 +76,7 @@ public class TemporaryFolderWithoutRule {
 In diesem Fall hat die `TemporaryFolder`-Rule also geholfen, den Test wesentlich kürzer und prägnanter zu formulieren. Zudem haben wir keine Hilfsmethoden in der Testklasse benötigt, der Code zum Anlegen und Löschen eines temporären Ordners ist in einer Klasse gekapselt, die in anderen Tests wiederverwendet werden kann.
 
 
-
-## Wozu kann ich Rules verwenden?
-
-
-### Bereitstellung externer Ressourcen
+## Bereitstellung externer Ressourcen
 
 Den häufigsten Anwendungsfall, insbesondere bei Integrationstests, haben wir bereits gesehen: die Vorbereitung vom Test verwendeter externer Ressourcen (z.B. Dateien, Server, Verbindungen) inklusive dem sauberen Aufräumen nach Ausführung des Tests. Besonders wichtig ist dies, wenn die Ressource von mehreren Tests verwendet werden. `TemporaryFolder` ist eine beispielhafte Implementierung für eine solche Rule. 
 
@@ -94,12 +93,14 @@ public class ProvideSystemProperty extends ExternalResource {
 		this.value = value;
 	}
 
-	@Override protected void before() {
+	@Override
+	protected void before() {
 		oldValue = System.getProperty(key);
 		System.setProperty(key, value);
 	}
 
-	@Override protected void after() {
+	@Override
+	protected void after() {
 		if (oldValue == null) {
 			System.clearProperty(key);
 		} else {
@@ -114,23 +115,26 @@ Und schon können wir unsere Rule in einem Test verwenden:
 ~~~java
 public class SomeTestUsingSystemProperty {
 
-	@Rule public ProvideSystemProperty property = new ProvideSystemProperty("someKey", "someValue");
+	@Rule
+	public ProvideSystemProperty property = new ProvideSystemProperty("someKey", "someValue");
 
-	@Test public void test() {
+	@Test
+	public void test() {
 		assertThat(System.getProperty("someKey"), is("someValue"));
 	}
 }
 ~~~
 
 
-### Benachrichtigung über die Testausführung
+## Benachrichtigung über die Testausführung
 
 Da man mit einer Rule Code vor und nach dem Aufruf der Testmethoden ausführen kann, lässt sich damit eine Benachrichtigung über die Testausführung realisieren. Dazu stellt JUnit die abstrakte Oberklasse `TestWatcher` bereit. Diese besitzt vier leer implementierte Methoden, die man nach Bedarf überschreiben und implementieren kann: `starting()`, `succeeded()`, `failed()` und `finished()`:
 
 ~~~java
 public class BeepOnFailure extends TestWatcher {
 
-	@Override protected void failed(Throwable e, Description description) {
+	@Override
+	protected void failed(Throwable e, Description description) {
 		Toolkit.getDefaultToolkit().beep();
 	}
 }
@@ -141,39 +145,45 @@ Die Benutzung in einem Test sieht dann so aus:
 ~~~java
 public class FailingTestThatBeeps {
 	
-	@Rule public BeepOnFailure beep = new BeepOnFailure();
+	@Rule
+	public BeepOnFailure beep = new BeepOnFailure();
 
-	@Test public void test() {
+	@Test
+	public void test() {
 		fail();
 	}
 }
 ~~~
 
-### Bereitstellung von Informationen über den Test
+## Bereitstellung von Informationen über den Test
 
 Eine Rule kann außerdem Informationen über den Test innerhalb des Tests verfügbar machen. So kann man mit der `TestName` Rule etwa auf den Namen des aktuellen Tests zugreifen.
 
 ~~~java
 public class NameRuleTest {
-	@Rule public TestName test = new TestName();
+	@Rule
+	public TestName test = new TestName();
 
-	@Test public void test() {
+	@Test
+	public void test() {
 		assertThat(test.getMethodName(), is("test"));
 	}
 }
 ~~~
 
 
-### Überprüfungen vor/nach der Tests
+## Überprüfungen vor/nach der Tests
 
 Desweiteren lassen sich spezielle Überprüfungen, die den Tests beispielsweise fehlschlagen lassen können, vor oder nach jedem Test ausführen. Der `ErrorCollector` sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus. So kann man etwa alle Elemente in einer Liste überprüfen und den Test erst am Ende fehlschlagen lassen, wenn die Überprüfung eines oder mehrerer Elemente fehlgeschlagen ist.
 
 ~~~java
 public class ErrorCollectingTest {
 
-	@Rule public ErrorCollector collector = new ErrorCollector();
+	@Rule
+	public ErrorCollector collector = new ErrorCollector();
 
-	@Test public void test() {
+	@Test
+	public void test() {
 		collector.checkThat(1 + 1, is(3));
 		collector.addError(new Exception("something went wrong"));
 	}
@@ -193,12 +203,14 @@ public class ExpectedExceptionWithRule {
 
 	@Rule public ExpectedException thrown = ExpectedException.none();
 
-	@Test public void exception() {
+	@Test
+	public void exception() {
 		thrown.expect(ArrayIndexOutOfBoundsException.class);
 		threeNumbers[3] = 4;
 	}
 
-	@Test public void exceptionWithMessage() {
+	@Test
+	public void exceptionWithMessage() {
 		thrown.expect(ArrayIndexOutOfBoundsException.class);
 		thrown.expectMessage("3");
 		threeNumbers[3] = 4;
@@ -218,7 +230,8 @@ public class ExpectedExceptionWithoutRule {
 		threeNumbers[3] = 4;
 	}
 
-	@Test public void exceptionWithMessage() {
+	@Test
+	public void exceptionWithMessage() {
 		try {
 			threeNumbers[3] = 4;
 			fail("ArrayIndexOutOfBoundsException expected");
@@ -236,13 +249,16 @@ Die `@Test`-Annotation hat einen weitere optionalen Parameter: `timeout`. Auch d
 ~~~java
 public class GlobalTimeout {
 
-	@Rule public Timeout timeout = new Timeout(20);
+	@Rule
+	public Timeout timeout = new Timeout(20);
 
-	@Test public void firstTest() {
+	@Test
+	public void firstTest() {
 		while (true) {}
 	}
 
-	@Test public void secondTest() {
+	@Test
+	public void secondTest() {
 		for (;;) {}
 	}
 }
@@ -264,7 +280,7 @@ public class LocalTimeouts {
 ~~~
 
 
-### ClassRules
+## Regeln auf Klassenebene
 
 Alle Rules, die wir bisher gesehen haben, wurden für jede Methode einzeln angewandt, genauso wie Methoden, die mit `@Before` und `@After` annotiert sind, vor bzw. nach jedem Test ausgeführt werden. Manchmal möchte man allerdings die Möglichkeit haben, Code nur einmal vor der ersten bzw. nach der letzten Testmethode in einer Klasse auszuführen. Ein häufiger Anwendungsfall sind Integrationstests, die eine Verbindung zu einem Server aufbauen und wieder schließen müssen. Das war bisher nur mit den Annotations `@BeforeClass` bzw. `@AfterClass` möglich, Rules konnte man dazu nicht verwenden. Um dieses Problem zu lösen, wurden in JUnit 4.9 ClassRules eingeführt.
 
@@ -291,7 +307,7 @@ public class UsesExternalResource {
 ~~~
 
 
-### Mehrere Regeln kombinieren
+## Mehrere Regeln kombinieren
 
 Einen weiteren Vorteil von Rules gegenüber Hilfsmethoden in Testoberklassen stellt ihre Kombinierbarkeit dar. Es lassen sich beliebig viele Rules in einem Test verwenden:
 
@@ -347,4 +363,4 @@ Rules sind die Umsetzung von *Delegation statt Vererbung* für Unit Tests. Wo fr
 
 Die vorgestellten, konkreten Rules sind demonstrieren lediglich die Vielfältigkeit der Einsatzmöglichkeiten. Eigene Regeln zu schreiben ist Dank der zur Verfügung gestellten Basisklassen einfach. Erst diese *Erweiterbarkeit* macht Rules zu einem wirklichen Novum.
 
-Die Macher von JUnit setzen jedenfalls für die Zukunft von JUnit voll auf den Einsatz und die Erweiterung von Rules. Kent Beck schreibt darüber in seinem Blog [[4]](http://www.threeriversinstitute.org/blog/?p=155)): „Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.”
+Die Macher von JUnit setzen jedenfalls für die Zukunft von JUnit voll auf den Einsatz und die Erweiterung von Rules. Kent Beck schreibt darüber in seinem Blog [[4]](http://www.threeriversinstitute.org/blog/?p=155): „Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.”
