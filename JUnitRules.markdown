@@ -375,8 +375,8 @@ Die Macher von JUnit setzen jedenfalls für die Zukunft von JUnit voll auf den E
 5. [Blog von Kent Beck][KentBeckBlog]
 
 [JensSchauderBlog]:  http://blog.schauderhaft.de/2009/10/04/junit-rules/
-[GitHubPage]:        https://marcphilipp.github.com/junit-rules/
-[ReleaseNotes4.9]:   https://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.9.txt
+[GitHubPage]:        http://marcphilipp.github.com/junit-rules/
+[ReleaseNotes4.9]:   http://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.9.txt
 [KentBeckRuleChain]: http://tech.groups.yahoo.com/group/junit/message/23537
-[ReleaseNotes4.10]:  https://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.10.txt
+[ReleaseNotes4.10]:  http://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.10.txt
 [KentBeckBlog]:      http://www.threeriversinstitute.org/blog/?p=155
