@@ -355,7 +355,7 @@ Die erste Regel (`outer rule`) umschließt also die mittlere (`middle rule`) und
 
 ## Schreib deine eigenen Regeln!
 
-Warum sollte man also Rules verwenden? Ein großer Pluspunkt von Rules ist ihre *Wiederverwendbarkeit*. Sie ermöglichen häufig benutzen `SetUp`/`TearDown`-Code in eine eigene `TestRule`-Klasse, die nur eine Verantwortlichkeit hat, auszulagern.
+Warum sollte man also Rules verwenden? Ein großer Pluspunkt von Rules ist ihre *Wiederverwendbarkeit*. Sie ermöglichen häufig benutzten `SetUp`/`TearDown`-Code in eine eigene `TestRule`-Klasse, die nur eine Verantwortlichkeit hat, auszulagern.
 
 Ein weiterer Vorteil ist die *Kombinierbarkeit* von Rules. Wie wir in diesem Artikel gesehen haben, lassen sich beliebig viele Regeln in einem Test verwenden, sowohl aus Klassen- als auch auf Methodenebene. Viele Dinge, für die es in der Vergangenheit eines eigenen Test Runners bedurfte, lassen sich nun mit Rules ebenso implementieren. Da man immer nur einen Test Runner aber beliebig viele Rules verwenden kann, stehen einem dadurch deutlich mehr Möglichkeiten offen. 
 
