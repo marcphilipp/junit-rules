@@ -174,7 +174,7 @@ public class NameRuleTest {
 
 ## Überprüfungen vor und nach den Tests
 
-Desweiteren lassen sich spezielle Überprüfungen, die den Tests beispielsweise fehlschlagen lassen können, vor oder nach jedem Test ausführen. Der `ErrorCollector` sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus. So kann man etwa alle Elemente in einer Liste überprüfen und den Test erst am Ende fehlschlagen lassen, wenn die Überprüfung eines oder mehrerer Elemente fehlgeschlagen ist.
+Desweiteren lassen sich spezielle Überprüfungen, die einen Test beispielsweise fehlschlagen lassen können, vor oder nach jedem Test ausführen. Der `ErrorCollector` sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus. So kann man etwa alle Elemente in einer Liste überprüfen und den Test erst am Ende fehlschlagen lassen, wenn die Überprüfung eines oder mehrerer Elemente fehlgeschlagen ist.
 
 ~~~java
 public class ErrorCollectingTest {
@@ -218,7 +218,7 @@ public class ExpectedExceptionWithRule {
 }
 ~~~
 
-Natürlich lässt sich das auch mit herkömmlichen Mitteln erreichen, den dafür ist ja eigentlich der `expected`-Parameter der `@Test`-Annotation vorgesehen. Möchte man aber auch die Nachricht der Exception testen, war man bisher gezwungen, auf einen `try`-`catch`-Block auszuweichen:
+Natürlich lässt sich das auch mit herkömmlichen Mitteln erreichen, denn genau dafür ist ja eigentlich der `expected`-Parameter der `@Test`-Annotation vorgesehen. Möchte man aber auch die Nachricht der Exception testen, war man bisher gezwungen, auf einen `try`-`catch`-Block auszuweichen:
 
 ~~~java
 public class ExpectedExceptionWithoutRule {
@@ -244,7 +244,7 @@ public class ExpectedExceptionWithoutRule {
 
 Nun lässt sich sowohl die Klasse als auch die Nachricht der erwarteten Exception über die gleiche Notation testen.
 
-Die `@Test`-Annotation hat einen weitere optionalen Parameter: `timeout`. Auch dafür gibt es nun eine Rule, die sich einsetzen lässt, wenn für alle Tests in einer Testklasse der gleiche Timeout gelten soll. Die beiden folgenden Tests sind äquivalent:
+Die `@Test`-Annotation hat einen weiteren optionalen Parameter: `timeout`. Auch dafür gibt es nun eine Rule, die sich einsetzen lässt, wenn für alle Tests in einer Testklasse der gleiche Timeout gelten soll. Die beiden folgenden Tests sind äquivalent:
 
 ~~~java
 public class GlobalTimeout {
