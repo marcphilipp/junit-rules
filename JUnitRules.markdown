@@ -46,7 +46,9 @@ public class GlobalTimeout {
 }
 ~~~
 
-Führt man diesen Test aus, schlagen beide Testmethoden fehl. Würde man die Rule nicht verwenden, würde dieser Test endlos laufen. (Anmerkung: Die `Timeout`-Rule ist ein Ersatz für den `timeout`-Parameter der `@Test`-Annotation.)
+Führt man diesen Test aus, schlagen beide Testmethoden fehl. Würde man die Rule nicht verwenden, liefe dieser Test endlos.
+
+Wer bisher den `timeout`-Parameter der `@Test`-Annotation verwendet hat, kann diesen durch die `Timeout`-Rule ersetzen. Die Rule bietet den Vorteil, dass sie nur einmal in der Klasse definiert werden muss und dann für alle Testmethoden gilt.
 
 ### Temporäre Dateien
 
@@ -105,7 +107,7 @@ public class TemporaryFolderWithRule {
 
 Die Testmethode `test()` verwendet die `TemporaryFolder`-Rule, um die Datei `test.txt` anzulegen und überprüft danach, dass die Datei erzeugt wurde. Doch wo wurde die Datei erzeugt? Der Name `TemporaryFolder` suggeriert es bereits: in einem temporären Ordner. Doch die Rule legt die Datei nicht nur an, sondern löscht sie nach dem Test auch wieder.
 
-### Überprüfen von Exceptions
+### Erwartete Exceptions
 
 Schon bisher kann das Auftreten von Exceptions mit dem `expected`-Parameter der `@Test`-Annotation getestet werden. Die `ExpectedException`-Rule erweitert die Test-Möglichkeiten für Exceptions. Damit lassen sich neben der Klasse auch die Message und mittels Hamcrest-Matchern sogar beliebige Details der geworfenen Exception testen.
 
