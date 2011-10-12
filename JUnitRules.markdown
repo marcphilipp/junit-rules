@@ -89,7 +89,7 @@ public class TemporaryFolderWithoutRule {
 }
 ~~~
 
-Dieser Test kann mit der `TemporaryFolder`-Rule wesentlich kürzer und prägnanter formuliert werden, da die Rule den Framework-Kode kapselt.
+Dieser Test kann mit der `TemporaryFolder`-Rule wesentlich kürzer und prägnanter formuliert werden, da die Rule den Framework-Code kapselt.
 
 ~~~java
 public class TemporaryFolderWithRule {
