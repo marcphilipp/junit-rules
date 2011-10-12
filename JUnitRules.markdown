@@ -153,9 +153,9 @@ public class ErrorCollectingTest {
 
 Wenn man diesen Test ausführt, erhält man zwei Fehlernachrichten mit jeweils einem Stacktrace, der einen zu der Zeile im Programmcode führt, wo die Überprüfung fehlgeschlagen ist.
 
-### Informationen über den Test
+### Testname
 
-Eine Rule kann außerdem Informationen über den Test innerhalb des Tests verfügbar machen. So kann man mit der `TestName`-Rule etwa auf den Namen des aktuellen Tests zugreifen.
+Um Testmethode innerhalb einer Testmethode auf deren Namen zuzugreifen, kann man die `TestName`-Rule verwendet.
 
 ~~~java
 public class NameRuleTest {
