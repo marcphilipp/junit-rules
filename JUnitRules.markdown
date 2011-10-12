@@ -16,13 +16,17 @@ Seitdem hat sich allerdings einiges getan. Die neueste Innovation, die mit Versi
 
 ## Was sind Rules?
 
-Für die Verwendung von Rules wurde eine neue Annotation eingeführt: Mithilfe der `@Rule`-Annotation markiert man Instanzvariablen einer Testklasse. Diese Felder müssen `public` sein und das Interface `TestRule` implementieren. Eine so definierte Regel wirkt sich auf die Ausführung jeder Testmethode in der Testklasse aus. Ähnlich einem Aspekt in der aspektorientierten Programmierung (AOP) kann die Rule Code vor, nach oder anstelle der Testmethode ausführen [[2][JensSchauderBlog]].
+Mithilfe von JUnit-Rules lässt sich die Ausführung von Tests beeinflussen. Ähnlich einem Aspekt in der aspektorientierten Programmierung (AOP) kann die Rule Code vor, nach oder anstelle einer Testmethode ausführen [[2][JensSchauderBlog]]. Hinter dieser abstrakten Beschreibung steckt ein mächtiges Werkzeug, wie die folgenden Beispiele zeigen.
 
-Das klingt zunächst recht abstrakt. Um das Ganze konkreter zu machen, schauen wir uns die vier von JUnit mitgelieferten Rules an (der Source Code aller Beispiele ist auf GitHub verfügbar [[3][GitHubPage]]).
+## Standard-Rules
+
+JUnit selbst liefert fünf Rules mit, an denen wir den praktischen Einsatz zeigen (der Quellcode aller Beispiele ist auf GitHub verfügbar [[3][GitHubPage]]).
 
 ### Timeout
 
-Die `Timeout`-Rule lässt Tests fehlschlagen, wenn sie nicht innerhalb einer bestimmten Zeit beendet wurden. Beispiele sind Tests mit Endlosschleifen.
+Als erste Rule stellen wird die `Timeout`-Rule vor. Sie lässt Tests fehlschlagen, wenn diese nicht innerhalb einer bestimmten Zeit beendet werden. Dadurch werden beispielsweise Tests mit Endlosschleifen nach einer bestimmten Zeit abgebrochen.
+
+Um die Rule zu verwenden, muss innerhalb des Tests ein Feld vom Typ `Timeout` angelegt werden. Dieses Feld muss `public` sein und mit der Annotation `@Rule` markiert werden, sodass JUnit die Rule erkennt. So markierte Rules wirken sich auf die Ausführung aller Testmethoden einer Testklasse aus.
 
 ~~~java
 public class GlobalTimeout {
@@ -42,15 +46,11 @@ public class GlobalTimeout {
 }
 ~~~
 
-Führt man diesen Test aus, schlagen beide Testmethoden fehl. Wie alle Rules gilt auch die `Timeout`-Rule für alle Testmethoden einer Klasse.
-
-An diesem Beispiel sieht man, wie das Feld `timeout` mit der `@Rule`-Annotation versehen wird. Dadurch erkennt JUnit, dass es sich um eine anzuwendende Rule handelt. Der Typ von `timeout` ist `org.junit.rules.Timeout` und implementiert das Interface `TestRule`. Wird ein Typ gewählt, der das Interface nicht implementiert, wirft JUnit eine entsprechende Exception.
-
-Anmerkung: Die `Timeout`-Rule ist der Ersatz für den `timeout`-Parameter der `@Test`-Annotation.
+Führt man diesen Test aus, schlagen beide Testmethoden fehl. Würde man die Rule nicht verwenden, würde dieser Test endlos laufen. (Anmerkung: Die `Timeout`-Rule ist ein Ersatz für den `timeout`-Parameter der `@Test`-Annotation.)
 
 ### Temporäre Dateien
 
-Beim Testen von Kode, der Dateioperationen ausführt, steht man häufig vor dem Problem, dass der Test temporär eine Datei benötigt, die nach dem Test wieder gelöscht werden soll. Bisher brachte man den entsprechenden Kode in @Before- und @After-Methoden unter, wie das folgende Beispiel zeigt.
+Beim Testen von Code, der Dateioperationen ausführt, steht man häufig vor dem Problem, dass der Test temporär eine Datei benötigt, die nach dem Test wieder gelöscht werden soll. Bisher brachte man den entsprechenden Code in @Before- und @After-Methoden unter, wie das folgende Beispiel zeigt.
 
 ~~~java
 public class TemporaryFolderWithoutRule {
@@ -105,27 +105,7 @@ public class TemporaryFolderWithRule {
 
 Die Testmethode `test()` verwendet die `TemporaryFolder`-Rule, um die Datei `test.txt` anzulegen und überprüft danach, dass die Datei erzeugt wurde. Doch wo wurde die Datei erzeugt? Der Name `TemporaryFolder` suggeriert es bereits: in einem temporären Ordner. Doch die Rule legt die Datei nicht nur an, sondern löscht sie nach dem Test auch wieder.
 
-## Überprüfen von Exceptions
-
-Der `ErrorCollector` sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus. So kann man etwa alle Elemente in einer Liste überprüfen und den Test erst am Ende fehlschlagen lassen, wenn die Überprüfung eines oder mehrerer Elemente fehlgeschlagen ist.
-
-~~~java
-public class ErrorCollectingTest {
-
-	@Rule
-	public ErrorCollector collector = new ErrorCollector();
-
-	@Test
-	public void test() {
-		collector.checkThat(1 + 1, is(3));
-		collector.addError(new Exception("something went wrong"));
-	}
-}
-~~~
-
-Wenn man diesen Test ausführt, erhält man zwei Fehlernachrichten mit jeweils einem Stacktrace, der einen zu der Zeile im Programmcode führt, wo die Überprüfung fehlgeschlagen ist.
-
-## Überprüfen von Exceptions
+### Überprüfen von Exceptions
 
 Schon bisher kann das Auftreten von Exceptions mit dem `expected`-Parameter der `@Test`-Annotation getestet werden. Die `ExpectedException`-Rule erweitert die Test-Möglichkeiten für Exceptions. Damit lassen sich neben der Klasse auch die Message und mittels Hamcrest-Matchern sogar beliebige Details der geworfenen Exception testen.
 
@@ -150,6 +130,26 @@ public class ExpectedExceptionWithRule {
 	}
 }
 ~~~
+
+### Fehler sammeln
+
+Üblicherweise bricht ein Test nach der ersten fehlgeschlagenen Assertion ab. Will man in einem Test trotzdem alle Assertions abarbeiten, kann man den `ErrorCollector` verwenden. Er sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus. So kann man etwa alle Elemente in einer Liste überprüfen und den Test erst am Ende fehlschlagen lassen, wenn die Überprüfung eines oder mehrerer Elemente fehlgeschlagen ist.
+
+~~~java
+public class ErrorCollectingTest {
+
+	@Rule
+	public ErrorCollector collector = new ErrorCollector();
+
+	@Test
+	public void test() {
+		collector.checkThat(1 + 1, is(3));
+		collector.addError(new Exception("something went wrong"));
+	}
+}
+~~~
+
+Wenn man diesen Test ausführt, erhält man zwei Fehlernachrichten mit jeweils einem Stacktrace, der einen zu der Zeile im Programmcode führt, wo die Überprüfung fehlgeschlagen ist.
 
 ### Informationen über den Test
 
@@ -248,24 +248,6 @@ public class FailingTestThatBeeps {
 
 
 ## Überprüfungen vor und nach den Tests
-
-Desweiteren lassen sich spezielle Überprüfungen, die einen Test beispielsweise fehlschlagen lassen können, vor oder nach jedem Test ausführen. Der `ErrorCollector` sammelt fehlgeschlagene Assertions innerhalb einer Testmethode und gibt am Ende eine Liste der Fehlschläge aus. So kann man etwa alle Elemente in einer Liste überprüfen und den Test erst am Ende fehlschlagen lassen, wenn die Überprüfung eines oder mehrerer Elemente fehlgeschlagen ist.
-
-~~~java
-public class ErrorCollectingTest {
-
-	@Rule
-	public ErrorCollector collector = new ErrorCollector();
-
-	@Test
-	public void test() {
-		collector.checkThat(1 + 1, is(3));
-		collector.addError(new Exception("something went wrong"));
-	}
-}
-~~~
-
-Wenn man diesen Test ausführt, erhält man zwei Fehlernachrichten mit jeweils einem Stacktrace, der einen zu der Zeile im Programmcode führt, wo die Überprüfung fehlgeschlagen ist.
 
 Eigene Rules, die zusätzliche Überprüfungen durchführen können, lassen sich bequem implementieren, indem man von der Klasse `Verifier` ableitet und die `verify()`-Methode implementiert.
 
