@@ -1,6 +1,6 @@
 # JUnit Rules
 
-Marc Philipp, andrena objects ag
+Marc Philipp, andrena objects ag  
 Stefan Birkner, Immobilien Scout GmbH
 
 _Automatisierte Tests sind aus der heutigen Softwareentwicklung nicht mehr wegzudenken. JUnit ist das älteste und bekannteste Testing-Framework für Java. Doch selbst ein so etabliertes und einfach zu benutzendes Framework wird kontinuierlich weiterentwickelt. Eine der Neuerungen sind JUnit Rules, die Entwicklern eine neue mächtige Möglichkeit bieten, Tests zu formulieren und besser zu strukturieren._
