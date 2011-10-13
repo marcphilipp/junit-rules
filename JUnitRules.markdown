@@ -254,10 +254,11 @@ public class FailingTestThatBeeps {
 }
 ~~~
 
-
 ### Überprüfungen nach den Tests
 
-Eigene Rules, die zusätzliche Überprüfungen durchführen können, lassen sich bequem implementieren, indem man von der Klasse `Verifier` ableitet und die `verify()`-Methode implementiert.
+Das dritte von JUnit zur Verfügung gestellte Template ist der `Verifier`. Dort kann man die Methode `verify()` überschreiben, die nach jedem erfolgreichen Test ausgeführt wird. In dieser Methode lassen sich zusätzliche Überprüfungen unterbringen, die im Fehlerfall eine Exception werfen, um den Test doch noch scheitern zu lassen.
+
+Eine Beispielimplementierung des `Verifier`s ist der weiter oben vorgestellte `ErrorCollector`. Während des Testlaufs sammelt er alle fehlgeschlagenen Assertions und wirft im Fehlerfall eine `MultipleFailureException` am Ende des Tests.
 
 
 ## Regeln auf Klassenebene
