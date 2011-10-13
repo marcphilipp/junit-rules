@@ -169,11 +169,17 @@ public class NameRuleTest {
 }
 ~~~
 
-## Bereitstellung externer Ressourcen
+## Rules selber schreiben
 
-Den häufigsten Anwendungsfall, insbesondere bei Integrationstests, haben wir bereits gesehen: die Vorbereitung vom Test verwendeter externer Ressourcen (z.B. Dateien, Server, Verbindungen) inklusive dem sauberen Aufräumen nach Ausführung des Tests. Besonders wichtig ist dies, wenn die Ressource von mehreren Tests verwendet werden. `TemporaryFolder` ist eine beispielhafte Implementierung für eine solche Rule. 
+Die von JUnit bereitgestellten Rules sind nur der Anfang. Wer sich das Schreiben von Tests erleichtern will, kann seine eigenen Rules schreiben. Das sind letztendlich Klassen, die das Interface `TestRule` mit der Methode `apply(...)` implementieren. Für die häufigsten Anwendungsfälle greift uns JUnit unter die Arme und stellt die drei Templateklassen `ExternalResource`, `TestWatcher` und `Verifier` zur Verfügung.
 
-Andere lassen sich leicht selbst implementieren, indem man von der Basisklasse `ExternalResource` ableitet. Möchte man etwa für einen Test sicherstellen, dass eine System Property einen bestimmten Wert hat und nach dem Test der alte Wert wiederhergestellt wird, könnte man die Methoden `before()` und `after()` wie folgt implementieren:
+### Bereitstellung externer Ressourcen
+
+Vielfach werden, insbesondere bei Integrationstests, externe Ressourcen wie Dateien, Server oder Verbindungen benötigt. Diese müssen dem Test zur Verfügung gestellt und nach dessen Ausführung wieder aufgeräumt werden. 
+
+Dieses Ressourcenhandling lässt sich recht einfach mit einer Rule abbilden, indem man von der Basisklasse `ExternalResource` ableitet. In der neuen Rule überschreibt man die `before()`-Methode, um die Ressource bereitzustellen, und die `after()`-Methode um sie nach dem Test wieder aufzuräumen. Ein Beispiel hierfür ist die `TemporaryFolder`-Rule, die in der `before()`-Methode ein neues Verzeichnis erstellt und es in der `after()`-Methode wieder löscht.
+
+Wie einfach sich eine solche Rule schreiben lässt, demonstriert das folgende Beispiel. Möchte man für einen Test sicherstellen, dass eine System Property einen bestimmten Wert hat und nach dem Test der alte Wert wiederhergestellt wird, könnte man die Methoden `before()` und `after()` wie folgt implementieren:
 
 ~~~java
 public class ProvideSystemProperty extends ExternalResource {
@@ -219,7 +225,7 @@ public class SomeTestUsingSystemProperty {
 ~~~
 
 
-## Benachrichtigung über die Testausführung
+### Benachrichtigung über die Testausführung
 
 Da man mit einer Rule Code vor und nach dem Aufruf der Testmethoden ausführen kann, lässt sich damit eine Benachrichtigung über die Testausführung realisieren. Dazu stellt JUnit die abstrakte Oberklasse `TestWatcher` bereit. Diese besitzt vier leer implementierte Methoden, die man nach Bedarf überschreiben kann: `starting()`, `succeeded()`, `failed()` und `finished()`:
 
@@ -249,7 +255,7 @@ public class FailingTestThatBeeps {
 ~~~
 
 
-## Überprüfungen vor und nach den Tests
+### Überprüfungen nach den Tests
 
 Eigene Rules, die zusätzliche Überprüfungen durchführen können, lassen sich bequem implementieren, indem man von der Klasse `Verifier` ableitet und die `verify()`-Methode implementiert.
 
