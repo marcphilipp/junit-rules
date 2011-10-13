@@ -14,10 +14,10 @@ Die Wahrnehmung in der Java-Entwicklergemeinde ist dementsprechend: Da JUnit so 
 Seitdem hat sich allerdings einiges getan. Die neueste Innovation, die mit Version 4.7 eingeführt wurde, heißt Rules. Zugegeben, unter dem Begriff kann man sich erst einmal nichts vorstellen. Hat man sich diese „Regeln” für Tests aber einmal eingehend angesehen -- und genau das werden wir in diesem Artikel tun -- stellt man fest: Rules werden die Art, wie wir JUnit-Tests schreiben, nachhaltig verändern.
 
 
-
 ## Was sind Rules?
 
 Mithilfe von JUnit-Rules lässt sich die Ausführung von Tests beeinflussen. Ähnlich einem Aspekt in der aspektorientierten Programmierung (AOP) kann die Rule Code vor, nach oder anstelle einer Testmethode ausführen [[2][JensSchauderBlog]]. Hinter dieser abstrakten Beschreibung steckt ein mächtiges Werkzeug, wie die folgenden Beispiele zeigen.
+
 
 ## Standard-Rules
 
@@ -25,7 +25,7 @@ JUnit selbst liefert fünf Rules mit, an denen wir den praktischen Einsatz zeige
 
 ### Timeout
 
-Als erste Rule stellen wird die `Timeout`-Rule vor. Sie lässt Tests fehlschlagen, wenn diese nicht innerhalb einer bestimmten Zeit beendet werden. Dadurch werden beispielsweise Tests mit Endlosschleifen nach einer bestimmten Zeit abgebrochen.
+Als erste Rule stellen wir die `Timeout`-Rule vor. Sie lässt Tests fehlschlagen, wenn diese nicht innerhalb einer bestimmten Zeit beendet werden. Dadurch werden beispielsweise Tests mit Endlosschleifen nach einer bestimmten Zeit abgebrochen.
 
 Um die Rule zu verwenden, muss innerhalb des Tests ein Feld vom Typ `Timeout` angelegt werden. Dieses Feld muss `public` sein und mit der Annotation `@Rule` markiert werden, sodass JUnit die Rule erkennt. So markierte Rules wirken sich auf die Ausführung aller Testmethoden einer Testklasse aus.
 
@@ -106,7 +106,7 @@ public class TemporaryFolderWithRule {
 }
 ~~~
 
-Die Testmethode `test()` verwendet die `TemporaryFolder`-Rule, um die Datei `test.txt` anzulegen und überprüft danach, dass die Datei erzeugt wurde. Doch wo wurde die Datei erzeugt? Der Name `TemporaryFolder` suggeriert es bereits: in einem temporären Ordner. Doch die Rule legt die Datei nicht nur an, sondern löscht sie nach dem Test auch wieder.
+Die Testmethode `test()` verwendet die `TemporaryFolder`-Rule, um die Datei `test.txt` anzulegen und überprüft danach, dass die Datei erzeugt wurde. Doch wo wurde die Datei erzeugt? Der Name `TemporaryFolder` suggeriert es bereits: in einem temporären Ordner. Doch die Rule legt die Datei nicht nur an, sondern löscht sie nach dem Test auch wieder, inklusive des temporären Ordners.
 
 ### Erwartete Exceptions
 
@@ -170,6 +170,7 @@ public class NameRuleTest {
 }
 ~~~
 
+
 ## Rules selber schreiben
 
 Die von JUnit bereitgestellten Rules sind nur der Anfang. Wer sich das Schreiben von Tests erleichtern will, kann seine eigenen Rules schreiben. Das sind letztendlich Klassen, die das Interface `TestRule` mit der Methode `apply(...)` implementieren. Für die häufigsten Anwendungsfälle greift uns JUnit unter die Arme und stellt die drei Templateklassen `ExternalResource`, `TestWatcher` und `Verifier` zur Verfügung.
@@ -210,7 +211,7 @@ public class ProvideSystemProperty extends ExternalResource {
 }
 ~~~
 
-Und schon können wir unsere Rule in einem Test verwenden:
+Und schon kann man die Rule in einem Test verwenden:
 
 ~~~java
 public class SomeTestUsingSystemProperty {
@@ -224,7 +225,6 @@ public class SomeTestUsingSystemProperty {
 	}
 }
 ~~~
-
 
 ### Benachrichtigung über die Testausführung
 
@@ -259,14 +259,14 @@ public class FailingTestThatBeeps {
 
 Das dritte von JUnit zur Verfügung gestellte Template ist der `Verifier`. Dort kann man die Methode `verify()` überschreiben, die nach jedem erfolgreichen Test ausgeführt wird. In dieser Methode lassen sich zusätzliche Überprüfungen unterbringen, die im Fehlerfall eine Exception werfen, um den Test doch noch scheitern zu lassen.
 
-Eine Beispielimplementierung des `Verifier`s ist der weiter oben vorgestellte `ErrorCollector`. Während des Testlaufs sammelt er alle fehlgeschlagenen Assertions und wirft im Fehlerfall eine `MultipleFailureException` am Ende des Tests.
+Eine Beispielimplementierung von `Verifier` ist der weiter oben vorgestellte `ErrorCollector`. Während des Testlaufs sammelt er alle fehlgeschlagenen Assertions und wirft im Fehlerfall eine `MultipleFailureException` am Ende des Tests.
 
 
 ## Regeln auf Klassenebene
 
-Alle Rules, die wir bisher gesehen haben, wurden für jede Methode einzeln angewandt, genauso wie Methoden, die mit `@Before` und `@After` annotiert sind, vor bzw. nach jedem Test ausgeführt werden. Manchmal möchte man allerdings die Möglichkeit haben, Code nur einmal vor der ersten bzw. nach der letzten Testmethode in einer Klasse auszuführen. Ein häufiger Anwendungsfall sind Integrationstests, die eine Verbindung zu einem Server aufbauen und wieder schließen müssen. Das war bisher nur mit den Annotations `@BeforeClass` bzw. `@AfterClass` möglich, Rules konnte man dazu nicht verwenden. Um dieses Problem zu lösen, wurden in JUnit 4.9 ClassRules eingeführt.
+Alle Rules, die wir bisher gesehen haben, wurden für jede Methode einzeln angewandt, genauso wie Methoden, die mit `@Before` und `@After` annotiert sind, vor bzw. nach jedem Test ausgeführt werden. Manchmal möchte man allerdings die Möglichkeit haben, Code nur einmal vor der ersten bzw. nach der letzten Testmethode in einer Klasse auszuführen. Ein häufiger Anwendungsfall sind Integrationstests, die eine Verbindung zu einem Server aufbauen und wieder schließen müssen. Das war bisher nur mit den Annotations `@BeforeClass` bzw. `@AfterClass` möglich, Rules konnte man dazu nicht verwenden. Um dieses Problem zu lösen, wurden in JUnit 4.9 die `@ClassRule`-Annotation eingeführt.
 
-Ähnlich einer normalen Rule definiert man ein Feld in der Testklasse. Analog zu `@BeforeClass`-/`@AfterClass`-Methoden muss dieses Feld `public` und `static` sein. Der Typ des Feldes muss wie bei der `@Rule`-Annotation das `TestRule`-Interface implementieren. Eine solche Rule lässt sich nicht nur in einer normalen Testklasse verwenden, sondern auch in einer Test-Suite, wie das folgende Beispiel [[4][ReleaseNotes4.9]] illustriert:
+Um eine `ClassRule` zu verwenden, annotiert man ein Feld in der Testklasse, das analog zu `@BeforeClass`-/`@AfterClass`-Methoden `public` und `static` sein muss. Der Typ des Feldes muss wie bei der `@Rule`-Annotation das `TestRule`-Interface implementieren. Eine solche Rule lässt sich nicht nur in einer normalen Testklasse verwenden, sondern auch in einer Test-Suite, wie das folgende Beispiel [[4][ReleaseNotes4.9]] illustriert:
 
 ~~~java
 @RunWith(Suite.class)
@@ -347,6 +347,7 @@ Die vorgestellten, konkreten Rules demonstrieren lediglich die Vielfältigkeit d
 
 Die Macher von JUnit setzen jedenfalls für die Zukunft von JUnit voll auf den Einsatz und die Erweiterung von Rules. Kent Beck schreibt darüber in seinem Blog [[7][KentBeckBlog]]: „Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.”
 
+
 ## Links & Literatur
 
 1. [Kent Beck, Simple Smalltalk Testing: With Patterns][BeckSmalltalkTesting]
@@ -364,4 +365,3 @@ Die Macher von JUnit setzen jedenfalls für die Zukunft von JUnit voll auf den E
 [KentBeckRuleChain]:    http://tech.groups.yahoo.com/group/junit/message/23537
 [ReleaseNotes4.10]:     http://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.10.txt
 [KentBeckBlog]:         http://www.threeriversinstitute.org/blog/?p=155
-
