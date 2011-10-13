@@ -23,34 +23,6 @@ Mithilfe von JUnit-Rules lässt sich die Ausführung von Tests beeinflussen. Äh
 
 JUnit selbst liefert fünf Rules mit, an denen wir den praktischen Einsatz zeigen (der Quellcode aller Beispiele ist auf GitHub verfügbar [[3][GitHubPage]]).
 
-### Timeout
-
-Als erste Rule stellen wir die `Timeout`-Rule vor. Sie lässt Tests fehlschlagen, wenn diese nicht innerhalb einer bestimmten Zeit beendet werden. Dadurch werden beispielsweise Tests mit Endlosschleifen nach einer bestimmten Zeit abgebrochen.
-
-Um die Rule zu verwenden, muss innerhalb des Tests ein Feld vom Typ `Timeout` angelegt werden. Dieses Feld muss `public` sein und mit der Annotation `@Rule` markiert werden, sodass JUnit die Rule erkennt. So markierte Rules wirken sich auf die Ausführung aller Testmethoden einer Testklasse aus.
-
-~~~java
-public class GlobalTimeout {
-
-	@Rule
-	public Timeout timeout = new Timeout(20);
-
-	@Test
-	public void firstTest() {
-		while (true) {}
-	}
-
-	@Test
-	public void secondTest() {
-		for (;;) {}
-	}
-}
-~~~
-
-Führt man diesen Test aus, schlagen beide Testmethoden fehl. Würde man die Rule nicht verwenden, liefe dieser Test endlos.
-
-Wer bisher den `timeout`-Parameter der `@Test`-Annotation verwendet hat, kann diesen durch die `Timeout`-Rule ersetzen. Die Rule bietet den Vorteil, dass sie nur einmal in der Klasse definiert werden muss und dann für alle Testmethoden gilt.
-
 ### Temporäre Dateien
 
 Beim Testen von Code, der Dateioperationen ausführt, steht man häufig vor dem Problem, dass der Test temporär eine Datei benötigt, die nach dem Test wieder gelöscht werden soll. Bisher brachte man den entsprechenden Code in @Before- und @After-Methoden unter, wie das folgende Beispiel zeigt.
@@ -90,7 +62,9 @@ public class TemporaryFolderWithoutRule {
 }
 ~~~
 
-Dieser Test kann mit der `TemporaryFolder`-Rule wesentlich kürzer und prägnanter formuliert werden, da die Rule den Framework-Code kapselt.
+Dieser Test kann mit der `TemporaryFolder`-Rule wesentlich kürzer und prägnanter formuliert werden, da die Rule den Framework-Code kapselt. 
+
+Um die Rule zu verwenden, muss innerhalb des Tests ein Feld vom Typ `TemporaryFolder` angelegt werden. Dieses Feld muss `public` sein und mit der Annotation `@Rule` markiert werden, sodass JUnit die Rule erkennt. So markierte Rules wirken sich auf die Ausführung aller Testmethoden einer Testklasse aus.
 
 ~~~java
 public class TemporaryFolderWithRule {
@@ -106,7 +80,33 @@ public class TemporaryFolderWithRule {
 }
 ~~~
 
-Die Testmethode `test()` verwendet die `TemporaryFolder`-Rule, um die Datei `test.txt` anzulegen und überprüft danach, dass die Datei erzeugt wurde. Doch wo wurde die Datei erzeugt? Der Name `TemporaryFolder` suggeriert es bereits: in einem temporären Ordner. Doch die Rule legt die Datei nicht nur an, sondern löscht sie nach dem Test auch wieder, inklusive des temporären Ordners.
+Die Testmethode `test()` legt mithilfe der `TemporaryFolder`-Rule die Datei `test.txt` an und überprüft danach, dass die Datei erzeugt wurde. Doch wo wurde die Datei erzeugt? Der Name `TemporaryFolder` suggeriert es bereits: in einem temporären Ordner. Doch die Rule legt die Datei nicht nur an, sondern löscht sie nach dem Test auch wieder, inklusive des temporären Ordners.
+
+### Timeout
+
+Als zweite Rule stellen wir die `Timeout`-Rule vor. Sie lässt Tests fehlschlagen, wenn diese nicht innerhalb einer bestimmten Zeit beendet werden. Dadurch werden beispielsweise Tests mit Endlosschleifen nach einer bestimmten Zeit abgebrochen.
+
+~~~java
+public class GlobalTimeout {
+
+	@Rule
+	public Timeout timeout = new Timeout(20);
+
+	@Test
+	public void firstTest() {
+		while (true) {}
+	}
+
+	@Test
+	public void secondTest() {
+		for (;;) {}
+	}
+}
+~~~
+
+Führt man diesen Test aus, schlagen beide Testmethoden fehl. Würde man die Rule nicht verwenden, liefe dieser Test endlos.
+
+Wer bisher den `timeout`-Parameter der `@Test`-Annotation verwendet hat, kann diesen durch die `Timeout`-Rule ersetzen. Die Rule bietet den Vorteil, dass sie nur einmal in der Klasse definiert werden muss und dann für alle Testmethoden gilt.
 
 ### Erwartete Exceptions
 
