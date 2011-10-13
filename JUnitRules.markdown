@@ -84,13 +84,13 @@ Die Testmethode `test()` legt mithilfe der `TemporaryFolder`-Rule die Datei `tes
 
 ### Timeout
 
-Als zweite Rule stellen wir die `Timeout`-Rule vor. Sie lässt Tests fehlschlagen, wenn diese nicht innerhalb einer bestimmten Zeit beendet werden. Dadurch werden beispielsweise Tests mit Endlosschleifen nach einer bestimmten Zeit abgebrochen.
+Es kommt gelegentlich vor, dass man Code schreibt, der versehentlich Endlosschleifen enthält. Ein JUnit-Test, der diese Codestellen testet läuft in diese Endlosschleifen. Bei Verwendung der `Timeout`-Rule schlagen solche Tests fehl, da sie nicht innerhalb der vorgegebenen Zeit beendet werden.
 
 ~~~java
 public class GlobalTimeout {
 
 	@Rule
-	public Timeout timeout = new Timeout(20);
+	public Timeout timeout = new Timeout(20); //timeout nach 20 ms
 
 	@Test
 	public void firstTest() {
