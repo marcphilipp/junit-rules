@@ -84,7 +84,7 @@ Die Testmethode `test()` legt mithilfe der `TemporaryFolder`-Rule die Datei `tes
 
 ### Timeout
 
-Es kommt gelegentlich vor, dass man Code schreibt, der versehentlich Endlosschleifen enthält. Ein JUnit-Test, der diese Codestellen testet läuft in diese Endlosschleifen. Bei Verwendung der `Timeout`-Rule schlagen solche Tests fehl, da sie nicht innerhalb der vorgegebenen Zeit beendet werden.
+Es kommt gelegentlich vor, dass man Code schreibt, der versehentlich Endlosschleifen enthält. Ein JUnit-Test, der diese Codestellen testet, läuft in diese Endlosschleifen. Bei Verwendung der `Timeout`-Rule schlagen solche Tests fehl, da sie nicht innerhalb der vorgegebenen Zeit beendet werden.
 
 ~~~java
 public class GlobalTimeout {
