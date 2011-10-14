@@ -261,6 +261,33 @@ Das dritte von JUnit zur Verfügung gestellte Template ist der `Verifier`. Dort 
 
 Eine Beispielimplementierung von `Verifier` ist der weiter oben vorgestellte `ErrorCollector`. Während des Testlaufs sammelt er alle fehlgeschlagenen Assertions und wirft im Fehlerfall eine `MultipleFailureException` am Ende des Tests.
 
+### TestRule implementieren
+
+Anstatt eines der Templates zu verwenden kann man das Interface `TestRule` auch direkt implementieren. Dieses Interface hat genau eine Methode
+
+~~~java
+Statement apply(Statement base, Description description);
+~~~
+
+Das erste Argument `base` kapselt den auszuführenden Test, der sich mittels `evaluate()` ausführen lässt. Die `description` stellt Informationen zum Test zu Verfügung (bspw. den Testnamen). Der Rückgabewert der Methode ist ein `Statement` dass anstelle des Tests ausgeführt wird. Üblicherweise erstellt delegiert das neue `Statement` den Aufruf von `evaluate()` zum ursprünglichen Test und führt zusätzlich weitere Methoden aus. Der folgende Code zeigt beispielhaft die leicht abgewandelte Implementierung des `ExternalResource`-Templates.
+
+~~~java
+public Statement apply(Statement base, Description description) {
+	return new Statement() {
+		@Override
+		public void evaluate() throws Throwable {
+			before();
+			try {
+				base.evaluate();
+			} finally {
+				after();
+			}
+		}
+	};
+}
+~~~
+
+Hier wird zuerst die Template-Methode `before()` ausgeführt, dann der Test selbst mittels `base.evaluate()` und zum Schluss die zweite Template-Methode `after()`.
 
 ## Regeln auf Klassenebene
 
@@ -337,13 +364,13 @@ Die erste Regel (`outer rule`) umschließt also die mittlere (`middle rule`) und
 
 ## Schreib deine eigenen Regeln!
 
-Warum sollte man also Rules verwenden? Ein großer Pluspunkt von Rules ist ihre *Wiederverwendbarkeit*. Sie ermöglichen häufig benutzten `SetUp`/`TearDown`-Code in eine eigene `TestRule`-Klasse, die nur eine Verantwortlichkeit hat, auszulagern.
+Warum sollte man Rules verwenden? Ein großer Pluspunkt von Rules ist ihre *Wiederverwendbarkeit*. Sie ermöglichen häufig benutzten `SetUp`/`TearDown`-Code in eine eigene `TestRule`-Klasse auszulagern, die nur eine Verantwortlichkeit hat.
 
-Ein weiterer Vorteil ist die *Kombinierbarkeit* von Rules. Wie wir in diesem Artikel gesehen haben, lassen sich beliebig viele Regeln in einem Test verwenden, sowohl aus Klassen- als auch auf Methodenebene. Viele Dinge, für die es in der Vergangenheit eines eigenen Test Runners bedurfte, lassen sich nun mit Rules ebenso implementieren. Da man immer nur einen Test Runner aber beliebig viele Rules verwenden kann, stehen einem dadurch deutlich mehr Möglichkeiten offen. 
+Ein weiterer Vorteil ist die *Kombinierbarkeit* von Rules. Wie wir in diesem Artikel gesehen haben, lassen sich beliebig viele Regeln in einem Test verwenden, sowohl auf Klassen- als auch auf Methodenebene. Viele Dinge, für die es in der Vergangenheit eines eigenen Test Runners bedurfte, lassen sich jetzt mit Rules implementieren. Da man immer nur einen Test Runner aber beliebig viele Rules verwenden kann, stehen einem deutlich mehr Möglichkeiten offen. 
 
 Rules sind die Umsetzung von *Delegation statt Vererbung* für Unittests. Wo früher Testklassenhierarchien mit Utility-Methoden gewuchert sind, kann man jetzt auf einfache Art und Weise verschiedene Rules kombinieren. 
 
-Die vorgestellten, konkreten Rules demonstrieren lediglich die Vielfältigkeit der Einsatzmöglichkeiten. Eigene Regeln zu schreiben ist Dank der zur Verfügung gestellten Basisklassen einfach. Erst diese *Erweiterbarkeit* macht Rules zu einem wirklichen Novum.
+Die vorgestellten, konkreten Rules demonstrieren lediglich die Vielfältigkeit der Einsatzmöglichkeiten. Eigene Regeln zu schreiben ist Dank der zur Verfügung gestellten Templateklassen einfach. Erst diese *Erweiterbarkeit* macht Rules zu einem wirklichen Novum.
 
 Die Macher von JUnit setzen jedenfalls für die Zukunft von JUnit voll auf den Einsatz und die Erweiterung von Rules. Kent Beck schreibt darüber in seinem Blog [[7][KentBeckBlog]]: „Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.”
 
