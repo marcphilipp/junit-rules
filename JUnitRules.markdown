@@ -5,7 +5,7 @@ Stefan Birkner, Immobilien Scout GmbH
 
 _Automatisierte Tests sind aus der heutigen Softwareentwicklung nicht mehr wegzudenken. JUnit ist das älteste und bekannteste Testing-Framework für Java. Doch selbst ein so etabliertes und einfach zu benutzendes Framework wird kontinuierlich weiterentwickelt. Eine der Neuerungen sind JUnit Rules, die Entwicklern eine neue mächtige Möglichkeit bieten, Tests zu formulieren und besser zu strukturieren._
 
-Der Legende nach haben Kent Beck und Erich Gamma 1997 den Kern von JUnit auf dem Weg zu einer Konferenz im Flugzeug zwischen Zürich und Atlanta geschrieben. JUnit griff die Idee wieder auf, die Beck 1994 mit SUnit [[1][BeckSmalltalkTesting]] für Smalltalk eingeführt hatte: ein Testing-Framework, dessen Zielgruppe Programmierer sind, also dieselben Leute, die auch den Code schreiben, den es zu testen gilt. JUnit ist inzwischen weit verbreitet. Es wird nicht nur zum Schreiben von Unittests, sondern auch zur Automatisierung von Integrations- und Akzeptanztests verwendet.
+Der Legende nach haben Kent Beck und Erich Gamma 1997 den Kern von JUnit auf dem Weg zu einer Konferenz im Flugzeug zwischen Zürich und Atlanta geschrieben. JUnit griff die Idee wieder auf, die Beck 1994 mit SUnit [1] für Smalltalk eingeführt hatte: ein Testing-Framework, dessen Zielgruppe Programmierer sind, also dieselben Leute, die auch den Code schreiben, den es zu testen gilt. JUnit ist inzwischen weit verbreitet. Es wird nicht nur zum Schreiben von Unittests, sondern auch zur Automatisierung von Integrations- und Akzeptanztests verwendet.
 
 Viele erfolgreiche Open-Source-Projekte zeichnen sich dadurch aus, dass mit der Zeit immer neue Features eingebaut werden. Dies führt häufig dazu, dass einst simple Bibliotheken unübersichtlich und schwer wartbar werden. JUnit geht hier gezielt einen anderen Weg. David Saff, neben Kent Beck der zweite Maintainer von JUnit, sieht das so: „JUnit is the intersection of all possible useful Java test frameworks, not their union”.
 
@@ -16,12 +16,12 @@ Seitdem hat sich allerdings einiges getan. Die neueste Innovation, die mit Versi
 
 ## Was sind Rules?
 
-Mithilfe von JUnit-Rules lässt sich die Ausführung von Tests beeinflussen. Ähnlich einem Aspekt in der aspektorientierten Programmierung (AOP) kann die Rule Code vor, nach oder anstelle einer Testmethode ausführen [[2][JensSchauderBlog]]. Hinter dieser abstrakten Beschreibung steckt ein mächtiges Werkzeug, wie die folgenden Beispiele zeigen.
+Mithilfe von JUnit-Rules lässt sich die Ausführung von Tests beeinflussen. Ähnlich einem Aspekt in der aspektorientierten Programmierung (AOP) kann die Rule Code vor, nach oder anstelle einer Testmethode ausführen [2]. Hinter dieser abstrakten Beschreibung steckt ein mächtiges Werkzeug, wie die folgenden Beispiele zeigen.
 
 
 ## Standard-Rules
 
-JUnit selbst liefert fünf Rules mit, an denen wir den praktischen Einsatz zeigen (der Quellcode aller Beispiele ist auf GitHub verfügbar [[3][GitHubPage]]).
+JUnit selbst liefert fünf Rules mit, an denen wir den praktischen Einsatz zeigen (der Quellcode aller Beispiele ist auf GitHub verfügbar [3]).
 
 ### Temporäre Dateien
 
@@ -293,7 +293,7 @@ Hier wird zuerst die Template-Methode `before()` ausgeführt, dann der Test selb
 
 Alle Rules, die wir bisher gesehen haben, wurden für jede Methode einzeln angewandt, genauso wie Methoden, die mit `@Before` und `@After` annotiert sind, vor bzw. nach jedem Test ausgeführt werden. Manchmal möchte man allerdings die Möglichkeit haben, Code nur einmal vor der ersten bzw. nach der letzten Testmethode in einer Klasse auszuführen. Ein häufiger Anwendungsfall sind Integrationstests, die eine Verbindung zu einem Server aufbauen und wieder schließen müssen. Das war bisher nur mit den Annotations `@BeforeClass` bzw. `@AfterClass` möglich, Rules konnte man dazu nicht verwenden. Um dieses Problem zu lösen, wurde in JUnit 4.9 die `@ClassRule`-Annotation eingeführt.
 
-Um eine `ClassRule` zu verwenden, annotiert man ein Feld in der Testklasse, das analog zu `@BeforeClass`-/`@AfterClass`-Methoden `public` und `static` sein muss. Der Typ des Feldes muss wie bei der `@Rule`-Annotation das `TestRule`-Interface implementieren. Eine solche Rule lässt sich nicht nur in einer normalen Testklasse verwenden, sondern auch in einer Test-Suite, wie das folgende Beispiel [[4][ReleaseNotes4.9]] illustriert:
+Um eine `ClassRule` zu verwenden, annotiert man ein Feld in der Testklasse, das analog zu `@BeforeClass`-/`@AfterClass`-Methoden `public` und `static` sein muss. Der Typ des Feldes muss wie bei der `@Rule`-Annotation das `TestRule`-Interface implementieren. Eine solche Rule lässt sich nicht nur in einer normalen Testklasse verwenden, sondern auch in einer Test-Suite, wie das folgende Beispiel [4] illustriert:
 
 ~~~java
 @RunWith(Suite.class)
@@ -335,7 +335,7 @@ public class CombiningMultipleRules {
 }
 ~~~
 
-Das funktioniert wunderbar, solange die Rules voneinander unabhängig sind. JUnit macht absichtlich keinerlei Zusicherungen was die Reihenfolge der Abarbeitung von Rules angeht [[5][KentBeckRuleChain]]. Manchmal möchte man aber dennoch eine bestimmte Reihenfolge vorgeben. Angenommen man hat zwei Rules, von denen die erste eine bestimmte Ressource zur Verfügung stellt, die von der zweiten Rule benutzt wird. Dann möchte man sehr wohl sicherstellen, dass zuerst die Ressource bereitgestellt wird, bevor sie konsumiert wird. Dafür wurde in JUnit 4.10 die `RuleChain`-Klasse eingeführt. `RuleChain` implementiert selbst das `TestRule`-Interface, kann also verwendet werden, wie eine normale Rule [[6][ReleaseNotes4.10]]:
+Das funktioniert wunderbar, solange die Rules voneinander unabhängig sind. JUnit macht absichtlich keinerlei Zusicherungen was die Reihenfolge der Abarbeitung von Rules angeht [5]. Manchmal möchte man aber dennoch eine bestimmte Reihenfolge vorgeben. Angenommen man hat zwei Rules, von denen die erste eine bestimmte Ressource zur Verfügung stellt, die von der zweiten Rule benutzt wird. Dann möchte man sehr wohl sicherstellen, dass zuerst die Ressource bereitgestellt wird, bevor sie konsumiert wird. Dafür wurde in JUnit 4.10 die `RuleChain`-Klasse eingeführt. `RuleChain` implementiert selbst das `TestRule`-Interface, kann also verwendet werden, wie eine normale Rule [6]:
 
 ~~~java
 public class UseRuleChain {
@@ -372,23 +372,23 @@ Rules sind die Umsetzung von *Delegation statt Vererbung* für Unittests. Wo fr�
 
 Die vorgestellten, konkreten Rules demonstrieren lediglich die Vielfältigkeit der Einsatzmöglichkeiten. Eigene Regeln zu schreiben ist Dank der zur Verfügung gestellten Templateklassen einfach. Erst diese *Erweiterbarkeit* macht Rules zu einem wirklichen Novum.
 
-Die Macher von JUnit setzen jedenfalls für die Zukunft von JUnit voll auf den Einsatz und die Erweiterung von Rules. Kent Beck schreibt darüber in seinem Blog [[7][KentBeckBlog]]: „Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.”
+Die Macher von JUnit setzen jedenfalls für die Zukunft von JUnit voll auf den Einsatz und die Erweiterung von Rules. Kent Beck schreibt darüber in seinem Blog [7]: „Maybe once every five years unsuspectedly powerful abstractions drop out of a program with no apparent effort.”
 
 
 ## Links & Literatur
 
-1. [Kent Beck, Simple Smalltalk Testing: With Patterns][BeckSmalltalkTesting]
-2. [Blog von Jens Schauder][JensSchauderBlog]
-3. [Source Code der Beispiele auf GitHub][GitHubPage]
-4. [JUnit 4.9 Release Notes][ReleaseNotes4.9]
-5. [Mailing List Post von Kent Beck über das Design von Rules][KentBeckRuleChain]
-6. [JUnit 4.10 Release Notes][ReleaseNotes4.10]
-7. [Blog von Kent Beck][KentBeckBlog]
+1. Kent Beck, Simple Smalltalk Testing: With Patterns  
+   http://www.xprogramming.com/testfram.htm
+2. Blog von Jens Schauder  
+   http://blog.schauderhaft.de/2009/10/04/junit-rules/
+3. Source Code der Beispiele auf GitHub  
+   http://marcphilipp.github.com/junit-rules/
+4. JUnit 4.9 Release Notes  
+   http://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.9.txt
+5. Mailing List Post von Kent Beck über das Design von Rules  
+   http://tech.groups.yahoo.com/group/junit/message/23537
+6. JUnit 4.10 Release Notes  
+   http://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.10.txt
+7. Blog von Kent Beck  
+   http://www.threeriversinstitute.org/blog/?p=155
 
-[BeckSmalltalkTesting]: http://www.xprogramming.com/testfram.htm
-[JensSchauderBlog]:     http://blog.schauderhaft.de/2009/10/04/junit-rules/
-[GitHubPage]:           http://marcphilipp.github.com/junit-rules/
-[ReleaseNotes4.9]:      http://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.9.txt
-[KentBeckRuleChain]:    http://tech.groups.yahoo.com/group/junit/message/23537
-[ReleaseNotes4.10]:     http://github.com/KentBeck/junit/blob/master/doc/ReleaseNotes4.10.txt
-[KentBeckBlog]:         http://www.threeriversinstitute.org/blog/?p=155
