@@ -217,7 +217,8 @@ Und schon kann man die Rule in einem Test verwenden:
 public class SomeTestUsingSystemProperty {
 
 	@Rule
-	public ProvideSystemProperty property = new ProvideSystemProperty("someKey", "someValue");
+	public ProvideSystemProperty property =
+		new ProvideSystemProperty("someKey", "someValue");
 
 	@Test
 	public void test() {
@@ -302,7 +303,7 @@ public class UsesExternalResource {
 	public static Server myServer = new Server();
 
 	@ClassRule
-	public static ExternalResource connection = new ExternalResource() {
+	public static TestRule connection = new ExternalResource() {
 	
 		@Override protected void before() throws Throwable {
 			myServer.connect();
@@ -324,13 +325,13 @@ Einen weiteren Vorteil von Rules gegenüber Hilfsmethoden in Testoberklassen ste
 public class CombiningMultipleRules {
 
 	@Rule public TestRule beep = new BeepOnFailure();
-	@Rule public ExpectedException exceptions = ExpectedException.none();
+	@Rule public ExpectedException thrown = ExpectedException.none();
 	@Rule public TestName test = new TestName();
 
 	@Test
-	public void test() {
-		exceptions.expect(IllegalArgumentException.class);
-		throw new RuntimeException("Hello from " + test.getMethodName());
+	public void test() throws Exception {
+		thrown.expect(IllegalArgumentException.class);
+		throw new Exception("Hello from " + test.getMethodName());
 	}
 }
 ~~~
@@ -340,7 +341,8 @@ Das funktioniert wunderbar, solange die Rules voneinander unabhängig sind. JUni
 ~~~java
 public class UseRuleChain {
 	@Rule
-	public TestRule chain = RuleChain.outerRule(new LoggingRule("outer rule"))
+	public TestRule chain = RuleChain
+			.outerRule(new LoggingRule("outer rule"))
 			.around(new LoggingRule("middle rule"))
 			.around(new LoggingRule("inner rule"));
 	@Test
