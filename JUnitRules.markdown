@@ -269,7 +269,7 @@ Anstatt eines der Templates zu verwenden kann man das Interface `TestRule` auch 
 Statement apply(Statement base, Description description);
 ~~~
 
-Das erste Argument `base` kapselt den auszuführenden Test, der sich mittels `evaluate()` ausführen lässt. Die `description` stellt Informationen zum Test zu Verfügung (bspw. den Testnamen). Der Rückgabewert der Methode ist ein `Statement` dass anstelle des Tests ausgeführt wird. Üblicherweise erstellt delegiert das neue `Statement` den Aufruf von `evaluate()` an den ursprünglichen Test und führt zusätzlich weitere Methoden aus. Der folgende Code zeigt beispielhaft die leicht abgewandelte Implementierung des `ExternalResource`-Templates.
+Das erste Argument `base` kapselt den auszuführenden Test, der sich mittels `evaluate()` ausführen lässt. Die `description` stellt Informationen zum Test zu Verfügung (bspw. den Testnamen). Der Rückgabewert der Methode ist ein `Statement` dass anstelle des Tests ausgeführt wird. Üblicherweise delegiert das neue `Statement` den Aufruf von `evaluate()` an den ursprünglichen Test und führt zusätzlich weitere Methoden aus. Der folgende Code zeigt beispielhaft die leicht abgewandelte Implementierung des `ExternalResource`-Templates.
 
 ~~~java
 public Statement apply(Statement base, Description description) {
