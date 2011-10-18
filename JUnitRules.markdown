@@ -156,7 +156,7 @@ Wenn man diesen Test ausführt, erhält man zwei Fehlernachrichten mit jeweils e
 
 ### Testname
 
-Um Testmethode innerhalb einer Testmethode auf deren Namen zuzugreifen, kann man die `TestName`-Rule verwendet.
+Um innerhalb einer Testmethode auf deren Namen zuzugreifen, kann man die `TestName`-Rule verwendet.
 
 ~~~java
 public class NameRuleTest {
